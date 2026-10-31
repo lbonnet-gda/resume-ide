@@ -1,0 +1,22 @@
+services:
+  php:
+    build:
+      context: .
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
+    environment:
+      # The port is part of the site address so that Caddy redirects HTTP to the right HTTPS port on the host.
+      SERVER_NAME: localhost:${HTTPS_PORT:-8443}
+      DEFAULT_URI: https://localhost:${HTTPS_PORT:-8443}
+    volumes:
+      - ./:/app
+      - caddy_data:/data
+      - caddy_config:/config
+    ports:
+      - ${HTTP_PORT:-8000}:80
+      - ${HTTPS_PORT:-8443}:${HTTPS_PORT:-8443}
+
+volumes:
+  caddy_data:
+  caddy_config:
