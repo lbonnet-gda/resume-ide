@@ -12,6 +12,7 @@ Personal resume website styled as a PhpStorm-like IDE. Full specifications: `doc
 - Multi-agent workflows are expensive: ask the client before running one.
 - Only the project manager handles git (branches, commits, pushes, PRs), and only with the client's explicit go.
 - Mockups live in `docs/mockups/`.
+- Keep the GitHub Project board in sync: move an issue to "In progress" (and assign it) as soon as work on it starts.
 
 ## Rules
 
