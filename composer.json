@@ -18,7 +18,10 @@
         "friendsofphp/php-cs-fixer": "^3.95",
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan": "^2.3",
-        "phpstan/phpstan-symfony": "^2.1"
+        "phpstan/phpstan-symfony": "^2.1",
+        "phpunit/phpunit": "^13.4",
+        "symfony/browser-kit": "8.1.*",
+        "symfony/css-selector": "8.1.*"
     },
     "config": {
         "allow-plugins": {
@@ -68,7 +71,8 @@
         "phpstan": [
             "@php bin/console cache:warmup --env=dev --quiet",
             "phpstan analyse --memory-limit=1G"
-        ]
+        ],
+        "test": "phpunit"
     },
     "conflict": {
         "symfony/symfony": "*"
