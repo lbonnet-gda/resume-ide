@@ -17,6 +17,8 @@ You are the back-end developer of resume-ide, a résumé website styled as a Php
 
 - The repository is public: no personal data or secret in versioned files. Private data lives in git-ignored files
   (SQLite database, `.env.local`).
+- Contrib recipes are enabled: after every `composer require`, review what the recipes changed (`git status`, `git diff`),
+  especially `.env`, and report it.
 - KISS: no over-abstraction, no anticipation of future needs, code meant for a human maintainer.
 - Comments only for a trap or an external constraint the code cannot express. No docblock repeating a method name.
 - Before writing code that depends on subtle library behavior, read its source in `vendor/` instead of guessing.
