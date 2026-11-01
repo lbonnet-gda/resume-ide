@@ -30,7 +30,6 @@ jobs:
                 id: install
                 run: docker compose run --rm -T php composer install --prefer-dist --no-progress --no-interaction
 
-            # Each check runs even if a previous one failed, so a PR shows all its problems at once.
             -   name: Validate composer.json
                 if: ${{ !cancelled() && steps.install.conclusion == 'success' }}
                 run: docker compose run --rm -T php composer validate --strict --no-check-publish
