@@ -11,6 +11,9 @@ Personal resume website styled as a PhpStorm-like IDE. Full specifications: `doc
   contracts, PRs), not free discussion; the project manager relays between them and the client arbitrates.
 - Multi-agent workflows are expensive: ask the client before running one.
 - Only the project manager handles git (branches, commits, pushes, PRs), and only with the client's explicit go.
+- The project manager never changes code or configuration, even a one-liner: it always delegates to the relevant
+  developer, then to the QA. Exceptions: project management docs (`docs/specifications.md`, `CLAUDE.md`,
+  `.claude/agents/`) and GitHub/git operations.
 - Mockups live in `docs/mockups/`.
 - Keep the GitHub Project board in sync: move an issue to "In progress" (and assign it) as soon as work on it starts.
 
@@ -20,7 +23,10 @@ Personal resume website styled as a PhpStorm-like IDE. Full specifications: `doc
   `git status` before each commit. Only fake fixtures ("Jane Doe") are versioned.
 - KISS: no over-abstraction, no anticipation of future needs, code meant for a human maintainer.
 - Code style: PHP-CS-Fixer config aligned with the owner's PhpStorm scheme; run it before handing over PHP code.
-- Docs and code in US English; issues and PR descriptions may be in French.
+- Everything on GitHub and in the repository is in US English (code, docs, commits, issues, PRs, comments), since the
+  repository is public. Conversations with the client stay in French.
+- Public content (code, docs, issues, PRs) never mentions the owner's machine, employer or other projects: describe the
+  general reason instead (e.g., "avoid clashing with a local web server", not "ports taken on the dev machine").
 - GitHub workflow (project board, milestones, branches, PRs): see section 7 of the specifications.
 
 ## Tests
