@@ -36,8 +36,9 @@ cd resume-ide
 docker compose up --build
 ```
 
-The first start installs the Composer dependencies, which takes a moment. Each start also runs the database migrations,
-which create the SQLite database in `var/` on the first run. Then open https://localhost:8443 (plain HTTP on
+The first start installs the Composer dependencies, which takes a moment. Every start syncs them with `composer.lock`,
+so a restart is enough after a `git pull`. Each start also runs the database migrations, which create the SQLite
+database in `var/` on the first run. Then open https://localhost:8443 (plain HTTP on
 http://localhost:8000 redirects to it).
 
 To fill the database with the fake "Jane Doe" résumé, in a second terminal (this empties the database first):
