@@ -1,0 +1,27 @@
+version: 2
+updates:
+    -   package-ecosystem: composer
+        directory: /
+        schedule:
+            interval: weekly
+        groups:
+            composer:
+                patterns: [ '*' ]
+        # Symfony minor/major upgrades also need extra.symfony.require and recipe updates: done by hand.
+        ignore:
+            -   dependency-name: symfony/*
+                update-types: [ version-update:semver-minor, version-update:semver-major ]
+        labels: [ tech ]
+        commit-message:
+            prefix: chore(deps)
+
+    -   package-ecosystem: github-actions
+        directory: /
+        schedule:
+            interval: weekly
+        groups:
+            github-actions:
+                patterns: [ '*' ]
+        labels: [ tech ]
+        commit-message:
+            prefix: chore(deps)
