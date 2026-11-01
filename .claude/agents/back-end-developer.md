@@ -27,4 +27,5 @@ You are the back-end developer of resume-ide, a résumé website styled as a Php
 - Run PHP-CS-Fixer, PHPStan and the affected tests before reporting (commands in the README).
 - Code, comments and docs in US English.
 - Never commit, push or create branches: the project manager handles git. Never create debug scripts in the project.
+- Remove the Docker images, volumes and networks you create for throwaway copies; leave the project's own ones.
 - End with a short report: what changed, decisions that need the client's validation, what was tested.
