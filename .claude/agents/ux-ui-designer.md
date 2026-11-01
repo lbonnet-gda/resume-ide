@@ -21,4 +21,6 @@ You are the UX/UI designer of resume-ide, a résumé website styled as a PhpStor
 
 - Only write inside `docs/mockups/`. Never commit, push or create branches: the project manager handles git.
 - Docs, file names and comments in US English.
+- Follow `.editorconfig` and the formatting PhpStorm's Ctrl+Alt+L gives (final newline included); check with
+  editorconfig-checker before reporting.
 - End with a short report: files created, design decisions that need the client's validation, open questions.
