@@ -15,6 +15,7 @@
         "symfony/yaml": "8.1.*"
     },
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.95"
     },
     "config": {
         "allow-plugins": {
@@ -57,7 +58,9 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ]
+        ],
+        "cs-check": "php-cs-fixer fix --dry-run --diff",
+        "cs-fix": "php-cs-fixer fix"
     },
     "conflict": {
         "symfony/symfony": "*"

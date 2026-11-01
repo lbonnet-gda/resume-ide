@@ -175,7 +175,9 @@ Versions are checked when the project is initialized.
 - KISS: no over-abstraction, no anticipation of future needs, code written for a human maintainer.
 - Comments only for traps or external constraints that the code cannot express.
 - Code style: PHP-CS-Fixer based on `@Symfony`, aligned with the owner's PhpStorm scheme (Ctrl+Alt+L and the CI must
-  agree). Disable any `@Symfony` rule PhpStorm does not apply (e.g., Yoda style). The scheme's non-default settings:
+  agree). Disable any `@Symfony` rule PhpStorm does not apply (e.g., Yoda style). Where PhpStorm's defaults go against
+  the standard (`(int) $x`, `fn ($x)`), PhpStorm is aligned through `ij_php_*` properties in `.editorconfig`, scoped to
+  the project. `@Symfony:risky` is not enabled. The scheme's non-default settings:
     - no spaces around the concatenation operator (`'a'.$b`);
     - trailing comma in multiline arrays;
     - `elseif` as one word;
