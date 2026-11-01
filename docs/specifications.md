@@ -112,7 +112,8 @@ Fake shell with a fixed set of commands. Unknown commands print `command not fou
 ### 3.8 Admin
 
 - `/admin`, EasyAdmin, one single account (the owner).
-- CRUD on all resume data, with sortable lists (experience order, skills order).
+- CRUD on all resume data. Experiences and educations are ordered by date (newest first); skills, projects,
+  languages and interests have a manual order.
 - Login form, rate-limited; credentials from environment variables, password hashed.
 
 ### 3.9 Non-functional
