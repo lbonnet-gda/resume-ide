@@ -229,7 +229,8 @@ Per feature: issue → mockup if UI → client validation → implementation →
 **M1 — MVP**
 
 - Mockups of the main layout (desktop and mobile).
-- Data model, fixtures, admin with login.
+- Data model, fixtures, admin with login. With the first tests: separate test database, and `failOnEmptyTestSuite`
+  enabled in PHPUnit so that CI catches a suite emptied by mistake.
 - Layout: tree, tabs, editor, status bar, navigation with URLs.
 - File rendering in Code/Split/Preview modes, syntax highlighting.
 - Terminal with the V1 commands.
