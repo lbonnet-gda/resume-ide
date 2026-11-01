@@ -174,6 +174,7 @@ ol {
 
 .icon-button {
     display: inline-flex;
+    flex: none;
     align-items: center;
     justify-content: center;
     width: 28px;
@@ -243,6 +244,17 @@ ol {
     padding: 0 8px;
     border-radius: var(--radius);
     font-weight: 600;
+    white-space: nowrap;
+}
+
+.project-widget {
+    min-width: 0;
+}
+
+.project-widget__name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .project-widget__badge {
@@ -259,6 +271,7 @@ ol {
 
 .branch-selector {
     position: relative;
+    flex: none;
 }
 
 .top-bar__widget {
@@ -314,6 +327,7 @@ ol {
 
 .button {
     display: inline-flex;
+    flex: none;
     align-items: center;
     gap: 6px;
     height: 28px;
@@ -321,6 +335,7 @@ ol {
     border-radius: var(--radius);
     font-weight: 500;
     text-decoration: none;
+    white-space: nowrap;
 }
 
 .button--primary {
