@@ -15,13 +15,17 @@
         "symfony/yaml": "8.1.*"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.95"
+        "friendsofphp/php-cs-fixer": "^3.95",
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan": "^2.3",
+        "phpstan/phpstan-symfony": "^2.1"
     },
     "config": {
         "allow-plugins": {
             "php-http/discovery": true,
             "symfony/flex": true,
-            "symfony/runtime": true
+            "symfony/runtime": true,
+            "phpstan/extension-installer": true
         },
         "bump-after-update": true,
         "sort-packages": true
@@ -60,14 +64,18 @@
             "@auto-scripts"
         ],
         "cs-check": "php-cs-fixer fix --dry-run --diff",
-        "cs-fix": "php-cs-fixer fix"
+        "cs-fix": "php-cs-fixer fix",
+        "phpstan": [
+            "@php bin/console cache:warmup --env=dev --quiet",
+            "phpstan analyse --memory-limit=1G"
+        ]
     },
     "conflict": {
         "symfony/symfony": "*"
     },
     "extra": {
         "symfony": {
-            "allow-contrib": false,
+            "allow-contrib": true,
             "require": "8.1.*"
         }
     }

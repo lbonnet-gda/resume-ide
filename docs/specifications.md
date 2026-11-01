@@ -198,7 +198,8 @@ Versions are checked when the project is initialized.
 
 - Public repository on the owner's personal account, default branch `main`.
 - **Project** (board): Backlog, Ready, In progress, In review, Done.
-- **Milestones**: one per version (see 7.3).
+- **Milestones**: one per version (see 7.3), set on issues only. Pull requests are linked to their issue through
+  `Closes #N`, and are not added to the Project board either.
 - **Labels**: `feature`, `bug`, `design`, `tech`, `docs`, `accessibility`.
 - One issue per feature, written by the project manager with acceptance criteria.
 - Branches `feature/<issue>-<slug>` or `bugfix/<issue>-<slug>`, one PR per issue, `Closes #N` in the PR.
