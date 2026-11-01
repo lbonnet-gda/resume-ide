@@ -18,9 +18,10 @@ Progress is tracked on the public [roadmap](https://github.com/users/lbonnet-gda
 ## Stack
 
 - PHP 8.4, Symfony 8.1, served by FrankenPHP in Docker Compose.
+- Doctrine ORM with SQLite: the database is a single git-ignored file, no database server.
 - PHP-CS-Fixer, PHPStan (level `max`) and PHPUnit, run by GitHub Actions.
 - Planned for M1: Twig Components, Symfony UX Turbo, Live Component and Stimulus, AssetMapper (no Node.js, no build
-  step), Doctrine ORM with SQLite, EasyAdmin, PDF generation with Gotenberg.
+  step), EasyAdmin, PDF generation with Gotenberg.
 
 Pages are meant to be server-rendered and usable without JavaScript. Each file of the fake project is generated from
 the database. Details and reasons for each choice: [specifications](docs/specifications.md).
@@ -35,8 +36,15 @@ cd resume-ide
 docker compose up --build
 ```
 
-The first start installs the Composer dependencies, which takes a moment. Then open https://localhost:8443 (plain HTTP
-on http://localhost:8000 redirects to it).
+The first start installs the Composer dependencies, which takes a moment. Each start also runs the database migrations,
+which create the SQLite database in `var/` on the first run. Then open https://localhost:8443 (plain HTTP on
+http://localhost:8000 redirects to it).
+
+To fill the database with the fake "Jane Doe" résumé, in a second terminal (this empties the database first):
+
+```bash
+docker compose exec php bin/console doctrine:fixtures:load
+```
 
 The stack runs in the foreground, so use a second terminal for other commands, or add `-d` to start it in the
 background. Stop it with `Ctrl+C` or `docker compose down`.
@@ -66,8 +74,8 @@ docker compose exec php composer phpstan    # static analysis
 docker compose exec php composer test       # PHPUnit
 ```
 
-The CI runs these checks, plus YAML and service container lints, on every pull request and on `main`. The `main` branch
-is protected: changes go through a pull request with a passing CI.
+The CI runs these checks, plus YAML and service container lints and a check of the database schema and fixtures, on
+every pull request and on `main`. The `main` branch is protected: changes go through a pull request with a passing CI.
 
 ## How it is built
 

@@ -50,6 +50,14 @@ jobs:
                 if: ${{ !cancelled() && steps.install.conclusion == 'success' }}
                 run: docker compose run --rm -T php bin/console lint:container
 
+            -   name: Check the database schema and fixtures
+                if: ${{ !cancelled() && steps.install.conclusion == 'success' }}
+                run: >-
+                    docker compose run --rm -T php sh -c
+                    'bin/console doctrine:migrations:migrate --no-interaction
+                    && bin/console doctrine:schema:validate
+                    && bin/console doctrine:fixtures:load --no-interaction'
+
             -   name: Run PHPUnit
                 if: ${{ !cancelled() && steps.install.conclusion == 'success' }}
                 run: docker compose run --rm -T php composer test
