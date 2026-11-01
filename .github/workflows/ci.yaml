@@ -1,0 +1,56 @@
+name: CI
+
+on:
+    pull_request:
+        branches: [ main ]
+    push:
+        branches: [ main ]
+
+permissions:
+    contents: read
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+    checks:
+        name: Quality checks
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v7
+                with:
+                    persist-credentials: false
+
+            # The container user must own the checkout to write vendor/ and var/ (the runner uid is not 1000).
+            -   name: Build the Docker image
+                run: docker compose build --build-arg UID="$(id -u)"
+
+            -   name: Install dependencies
+                id: install
+                run: docker compose run --rm -T php composer install --prefer-dist --no-progress --no-interaction
+
+            # Each check runs even if a previous one failed, so a PR shows all its problems at once.
+            -   name: Validate composer.json
+                if: ${{ !cancelled() && steps.install.conclusion == 'success' }}
+                run: docker compose run --rm -T php composer validate --strict --no-check-publish
+
+            -   name: Check code style
+                if: ${{ !cancelled() && steps.install.conclusion == 'success' }}
+                run: docker compose run --rm -T php composer cs-check
+
+            -   name: Run PHPStan
+                if: ${{ !cancelled() && steps.install.conclusion == 'success' }}
+                run: docker compose run --rm -T php composer phpstan
+
+            -   name: Lint YAML config
+                if: ${{ !cancelled() && steps.install.conclusion == 'success' }}
+                run: docker compose run --rm -T php bin/console lint:yaml config --parse-tags
+
+            -   name: Lint the service container
+                if: ${{ !cancelled() && steps.install.conclusion == 'success' }}
+                run: docker compose run --rm -T php bin/console lint:container
+
+            -   name: Run PHPUnit
+                if: ${{ !cancelled() && steps.install.conclusion == 'success' }}
+                run: docker compose run --rm -T php composer test
