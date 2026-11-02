@@ -371,6 +371,14 @@ document.getElementById('tabs').addEventListener('auxclick', (event) => {
     }
 });
 
+// The tab bar has no scrollbar: the mouse wheel scrolls it horizontally, as in the IDE.
+document.querySelector('.tabs').addEventListener('wheel', (event) => {
+    if (event.deltaX === 0) {
+        event.preventDefault();
+        event.currentTarget.scrollLeft += event.deltaY;
+    }
+}, {passive: false});
+
 window.addEventListener('hashchange', openFromHash);
 
 // Tree: click toggles folders, arrow keys move between visible rows (Up/Down, Left/Right, Home/End).
@@ -427,6 +435,71 @@ tree.addEventListener('keydown', (event) => {
     event.preventDefault();
     target?.focus();
 });
+
+// Tree: a row cut off by the panel shows in full in a popup over the editor. Decorative, the row keeps the name.
+const treePopup = document.createElement('div');
+treePopup.className = 'tree__row tree-popup';
+treePopup.setAttribute('aria-hidden', 'true');
+treePopup.hidden = true;
+document.body.append(treePopup);
+
+const hideTreePopup = () => {
+    treePopup.hidden = true;
+};
+
+function isTruncated(row) {
+    const name = row.querySelector('.tree__name');
+    const hint = row.querySelector('.tree__hint');
+
+    return name.scrollWidth > name.clientWidth
+        || Boolean(hint && hint.getBoundingClientRect().top >= name.getBoundingClientRect().bottom);
+}
+
+function showTreePopup(row) {
+    const box = row.getBoundingClientRect();
+    const panel = tree.getBoundingClientRect();
+    if (!isTruncated(row) || box.top < panel.top || box.bottom > panel.bottom) {
+        hideTreePopup();
+
+        return;
+    }
+    treePopup.innerHTML = row.innerHTML;
+    treePopup.style.setProperty('--depth', row.style.getPropertyValue('--depth'));
+    treePopup.style.left = `${box.left}px`;
+    treePopup.style.top = `${box.top}px`;
+    treePopup.style.minWidth = `${box.width}px`;
+    treePopup.classList.toggle('is-selected', row.hasAttribute('aria-current'));
+    treePopup.classList.toggle('is-focused', row.matches(':focus-visible'));
+    treePopup.toggleAttribute('aria-expanded', row.hasAttribute('aria-expanded'));
+    if (row.hasAttribute('aria-expanded')) {
+        treePopup.setAttribute('aria-expanded', row.getAttribute('aria-expanded'));
+    }
+    treePopup.hidden = false;
+}
+
+if (window.matchMedia('(hover: hover)').matches) {
+    const rowOf = (event) => event.target.closest('.tree__row');
+
+    tree.addEventListener('mouseover', (event) => (rowOf(event) ? showTreePopup(rowOf(event)) : hideTreePopup()));
+    tree.addEventListener('mouseleave', hideTreePopup);
+    tree.addEventListener('focusin', (event) => showTreePopup(rowOf(event)));
+    tree.addEventListener('focusout', hideTreePopup);
+    tree.addEventListener('click', hideTreePopup);
+    // Focusing a row can scroll the tree: the popup then follows the focused row instead of disappearing.
+    tree.addEventListener('scroll', () => {
+        const focused = tree.querySelector('.tree__row:focus-visible');
+        if (focused) {
+            showTreePopup(focused);
+        } else {
+            hideTreePopup();
+        }
+    });
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            hideTreePopup();
+        }
+    });
+}
 
 // Desktop: the stripe button shows or hides the Project tool window.
 stripeProject.addEventListener('click', () => {
@@ -492,6 +565,13 @@ stripeTerminal.addEventListener('click', () => {
     }
 });
 setTerminalExpanded(!isMobile.matches);
+
+// A click in the panel focuses the input, unless it ends a text selection or lands on one of the panel's controls.
+terminal.addEventListener('click', (event) => {
+    if (!event.target.closest('button, a') && window.getSelection().isCollapsed) {
+        document.getElementById('terminal-input').focus({preventScroll: true});
+    }
+});
 
 // The mockup does not run commands: it only echoes them, and handles "clear".
 document.getElementById('terminal-form').addEventListener('submit', (event) => {
