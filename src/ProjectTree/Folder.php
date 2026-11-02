@@ -39,9 +39,11 @@ final readonly class Folder
             if ($node instanceof File) {
                 return null;
             }
+
             if ($segment === '' || $segment === '.') {
                 continue;
             }
+
             if ($segment === '..') {
                 $node = array_pop($parents) ?? $node;
 
@@ -50,6 +52,7 @@ final readonly class Folder
 
             $parents[] = $node;
             $node = array_find($node->children, static fn (self|File $child): bool => $child->name === $segment);
+
             if ($node === null) {
                 return null;
             }

@@ -47,9 +47,11 @@ final class FileNames
 
         foreach ($names as $name) {
             $uniqueName = $name;
+
             for ($number = 2; isset($used[strtolower($uniqueName)]); ++$number) {
                 $uniqueName = $name.$separator.$number;
             }
+
             $used[strtolower($uniqueName)] = true;
             $uniqueNames[] = $uniqueName;
         }

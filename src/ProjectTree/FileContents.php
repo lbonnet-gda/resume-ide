@@ -35,12 +35,15 @@ final class FileContents
             $profile->getLocation(),
             sprintf('[%1$s](mailto:%1$s)', $profile->getEmail()),
         ];
+
         if ($profile->getLinkedinUrl() !== null) {
             $contact[] = sprintf('[LinkedIn](%s)', $profile->getLinkedinUrl());
         }
+
         if ($profile->getGithubUrl() !== null) {
             $contact[] = sprintf('[GitHub](%s)', $profile->getGithubUrl());
         }
+
         $contact = implode(" ·\n", $contact);
 
         $experienceLines = implode("\n", array_map(
@@ -104,9 +107,11 @@ final class FileContents
     public static function env(Profile $profile): string
     {
         $lines = ['# Contact', 'EMAIL='.$profile->getEmail()];
+
         if ($profile->getLinkedinUrl() !== null) {
             $lines[] = 'LINKEDIN='.$profile->getLinkedinUrl();
         }
+
         if ($profile->getGithubUrl() !== null) {
             $lines[] = 'GITHUB='.$profile->getGithubUrl();
         }
@@ -166,14 +171,17 @@ final class FileContents
     public static function project(Project $project): string
     {
         $links = [];
+
         if ($project->getUrl() !== null) {
             $links[] = sprintf('- [Site](%s)', $project->getUrl());
         }
+
         if ($project->getRepositoryUrl() !== null) {
             $links[] = sprintf('- [Code source](%s)', $project->getRepositoryUrl());
         }
 
         $blocks = ['# '.$project->getName(), $project->getDescription()];
+
         if ($links !== []) {
             $blocks[] = implode("\n", $links);
         }
@@ -221,9 +229,11 @@ final class FileContents
     private static function phpClass(string $namespace, string $className, array $arguments): string
     {
         $lines = [];
+
         foreach ($arguments as $name => $value) {
             $lines[] = sprintf('            %s: %s,', $name, self::phpValue($value));
         }
+
         $lines = implode("\n", $lines);
 
         return <<<PHP
@@ -254,17 +264,21 @@ final class FileContents
         if ($value === null) {
             return 'null';
         }
+
         if ($value instanceof \DateTimeImmutable) {
             return sprintf("new \\DateTimeImmutable('%s')", $value->format('Y-m-d'));
         }
+
         if (is_string($value)) {
             return self::phpString($value);
         }
 
         $lines = ['['];
+
         foreach ($value as $item) {
             $lines[] = sprintf('                %s,', self::phpString($item));
         }
+
         $lines[] = '            ]';
 
         return implode("\n", $lines);
@@ -287,8 +301,10 @@ final class FileContents
     private static function yamlList(string $rootKey, array $items): string
     {
         $lines = [$rootKey.':'];
+
         foreach ($items as $item) {
             $prefix = '    -   ';
+
             foreach ($item as $key => $value) {
                 $lines[] = $prefix.$key.': '.self::yamlValue($value);
                 $prefix = '        ';

@@ -25,6 +25,7 @@ final readonly class ProjectTreeLoader
     public function load(): Folder
     {
         $profile = $this->entityManager->getRepository(Profile::class)->findOneBy([], ['id' => 'ASC']);
+
         if ($profile === null) {
             throw new \RuntimeException('The database has no profile: create one in the admin or load the fixtures.');
         }

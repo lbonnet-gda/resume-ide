@@ -135,8 +135,10 @@ final class ProjectTreeBuilderTest extends TestCase
     private static function descendants(Folder $folder): array
     {
         $nodes = [];
+
         foreach ($folder->children as $child) {
             $nodes[] = $child;
+
             if ($child instanceof Folder) {
                 $nodes = [...$nodes, ...self::descendants($child)];
             }
