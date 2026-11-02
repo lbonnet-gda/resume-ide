@@ -5,3 +5,4 @@ kept up to date: the website is the reference. Open each folder's `index.html` d
 server needed.
 
 - [`ide-layout/`](ide-layout/index.html): main IDE layout, desktop and mobile.
+- [`file-views/`](file-views/index.html): Code, Split and Preview views of each file type, desktop and mobile.

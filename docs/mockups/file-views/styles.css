@@ -1,0 +1,589 @@
+/*
+ * Only what this mockup adds to ../ide-layout/styles.css.
+ * Every text color below is >= 4.5:1 on --color-bg-editor; level dots and the active switch bar are >= 3:1.
+ */
+:root {
+    /* Syntax: PhpStorm-like dark colors. Comment is lighter than the original gray, which fails AA. */
+    --color-syntax-text: #bcbec4;
+    --color-syntax-keyword: #cf8e6d;
+    --color-syntax-string: #6aab73;
+    --color-syntax-function: #56a8f5;
+    --color-syntax-parameter: #56c1d6;
+    --color-syntax-property: #c77dbb;
+    --color-syntax-comment: #8c9097;
+
+    --color-link: #7aa7ff;
+    --color-link-hover: #a8c7ff;
+
+    /* Preview accents, also >= 4.5:1 on --color-bg-panel. */
+    --color-accent-markdown: #7aa7ff;
+    --color-accent-experience: #b189f5;
+    --color-accent-education: #56c1d6;
+    --color-accent-skills: #e0b65c;
+    --color-accent-contact: #8fbf8a;
+    --color-accent-languages: #e58a6b;
+    --color-accent-interests: #dd8fc8;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+/* Editor: one or two panes */
+.editor-area {
+    container-type: inline-size;
+}
+
+.file-view {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+}
+
+.file-view > .editor,
+.preview {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 0;
+}
+
+.file-view[data-mode="split"] > .preview {
+    border-left: 1px solid var(--color-border);
+}
+
+/* View mode switch */
+.view-modes {
+    border-left: 1px solid var(--color-border);
+}
+
+.view-modes__button {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 24px;
+    padding: 0;
+}
+
+.view-modes__button:hover {
+    color: var(--color-text);
+}
+
+/* The bar keeps the active state visible without relying on the low-contrast background alone. */
+.view-modes__button[aria-pressed="true"] {
+    box-shadow: inset 0 -2px 0 var(--color-focus);
+}
+
+.view-modes__button:focus-visible {
+    outline-offset: 1px;
+}
+
+/* One rule for mobile and narrow desktops: two panes need an editor at least 768px wide. Keep in sync with script.js. */
+@container (max-width: 767.98px) {
+    .view-modes__button[data-mode="split"] {
+        display: none;
+    }
+}
+
+/* Code */
+.editor__code {
+    color: var(--color-syntax-text);
+}
+
+/* The browser default font of <code> would break the alignment with the line numbers. */
+.editor__code code {
+    font: inherit;
+}
+
+/* Links in the source keep their syntax color at rest. Only external ones are underlined before hover. */
+.editor__code a {
+    color: inherit;
+    text-decoration: none;
+    text-underline-offset: 2px;
+}
+
+.editor__code a.is-external {
+    text-decoration: underline;
+}
+
+.editor__code a:hover {
+    color: var(--color-link-hover);
+    text-decoration: underline;
+}
+
+.syntax-target {
+    font-style: italic;
+}
+
+.editor__code a:focus-visible {
+    border-radius: 2px;
+    outline-offset: 1px;
+}
+
+.syntax-keyword,
+.syntax-yamlKey,
+.syntax-heading,
+.syntax-bullet {
+    color: var(--color-syntax-keyword);
+}
+
+.syntax-string {
+    color: var(--color-syntax-string);
+}
+
+.syntax-function,
+.syntax-linkText {
+    color: var(--color-syntax-function);
+}
+
+.syntax-parameter {
+    color: var(--color-syntax-parameter);
+}
+
+.syntax-property {
+    color: var(--color-syntax-property);
+}
+
+.syntax-comment {
+    color: var(--color-syntax-comment);
+}
+
+.syntax-heading,
+.syntax-bold {
+    font-weight: 700;
+}
+
+/* Preview: the page a recruiter reads. The accent follows the kind of file. */
+.preview {
+    container-type: inline-size;
+    overflow: auto;
+    padding: 24px 32px 32px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.preview__content {
+    --accent: var(--color-accent-markdown);
+    max-width: 920px;
+    margin: 0 auto;
+}
+
+.preview__content[data-kind="experience"] {
+    --accent: var(--color-accent-experience);
+}
+
+.preview__content[data-kind="education"] {
+    --accent: var(--color-accent-education);
+}
+
+.preview__content[data-kind="skills"] {
+    --accent: var(--color-accent-skills);
+}
+
+.preview__content[data-kind="contact"] {
+    --accent: var(--color-accent-contact);
+}
+
+.preview__content[data-kind="languages"] {
+    --accent: var(--color-accent-languages);
+}
+
+.preview__content[data-kind="interests"] {
+    --accent: var(--color-accent-interests);
+}
+
+.preview a {
+    color: var(--color-link);
+    text-underline-offset: 2px;
+    overflow-wrap: anywhere;
+}
+
+.preview a:hover {
+    color: var(--color-link-hover);
+}
+
+.preview a:focus-visible {
+    border-radius: 2px;
+    outline-offset: 2px;
+}
+
+.preview__external {
+    margin-left: 3px;
+    vertical-align: -1px;
+}
+
+.preview__mono {
+    font-family: var(--font-mono);
+}
+
+/* Header: file identity */
+.preview__header {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.preview__tile {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
+    color: var(--accent);
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.preview__tile .icon {
+    width: 28px;
+    height: 28px;
+}
+
+.preview__identity {
+    flex: 1;
+    min-width: 0;
+}
+
+.preview__path {
+    margin: 0 0 2px;
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+
+.preview h1 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+.preview__subtitle {
+    margin: 2px 0 0;
+    color: var(--color-text);
+    font-size: 16px;
+}
+
+.preview__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    margin-top: 8px;
+    color: var(--color-text-muted);
+}
+
+.preview__meta li {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    min-width: 0;
+}
+
+.preview__meta .icon:not(.preview__external) {
+    color: var(--accent);
+}
+
+/* Sections */
+.preview__section {
+    margin-top: 24px;
+}
+
+.preview h2 {
+    margin: 0 0 10px;
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.preview__lead {
+    font-size: 15px;
+}
+
+.preview__lead p {
+    margin: 0 0 8px;
+}
+
+.preview__columns {
+    display: grid;
+    gap: 0 32px;
+}
+
+.preview__header + .preview__columns {
+    margin-top: -24px;
+}
+
+@container (min-width: 720px) {
+    .preview__columns {
+        grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    }
+}
+
+/* Cards */
+.preview__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+    gap: 12px;
+}
+
+.preview__grid--wide {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+}
+
+.preview__card {
+    padding: 14px 16px;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    background: var(--color-bg-panel);
+}
+
+.preview__card-text {
+    display: block;
+    color: var(--color-text-muted);
+}
+
+.preview__link-card {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 10px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    background: var(--color-bg-panel);
+}
+
+.preview__link-card .icon {
+    color: var(--accent);
+}
+
+.preview__link-card:hover {
+    border-color: var(--accent);
+}
+
+.preview__label {
+    display: block;
+    color: var(--color-text-muted);
+    font-size: 12px;
+}
+
+.preview__card-icon {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--accent);
+}
+
+/* Timeline */
+.preview__timeline li {
+    position: relative;
+    padding: 0 0 16px 22px;
+}
+
+.preview__timeline li:last-child {
+    padding-bottom: 0;
+}
+
+.preview__timeline li::before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: 0;
+    width: 11px;
+    height: 11px;
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+}
+
+.preview__timeline li::after {
+    content: "";
+    position: absolute;
+    top: 20px;
+    bottom: -1px;
+    left: 5px;
+    width: 1px;
+    background: var(--color-text-line-number);
+}
+
+.preview__timeline li:last-child::after {
+    display: none;
+}
+
+.preview__timeline li[aria-current="true"]::before {
+    background: var(--accent);
+}
+
+.preview__timeline-dates,
+.preview__timeline-subtitle {
+    display: block;
+    color: var(--color-text-muted);
+}
+
+.preview__timeline-dates {
+    font-size: 12px;
+}
+
+.preview__timeline-title {
+    display: block;
+    font-weight: 600;
+}
+
+/* Lists and tags */
+.preview__list {
+    padding-left: 32px;
+    list-style: disc;
+}
+
+.preview__list li::marker {
+    color: var(--accent);
+}
+
+.preview__list li + li {
+    margin-top: 6px;
+}
+
+.preview__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.preview__tags li {
+    padding: 1px 8px;
+    border: 1px solid color-mix(in srgb, var(--accent) 60%, transparent);
+    border-radius: var(--radius);
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    font-size: 13px;
+}
+
+.preview__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 12px;
+}
+
+.preview__actions li {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.preview__actions .icon:not(.preview__external) {
+    color: var(--accent);
+}
+
+/* Levels: empty and filled dots share the same outer size because the border is part of the box. */
+.preview__dots {
+    display: inline-flex;
+    gap: 4px;
+}
+
+.preview__dot {
+    width: 10px;
+    height: 10px;
+    border: 1.5px solid var(--accent);
+    border-radius: 50%;
+}
+
+.preview__dot.is-filled {
+    background: var(--accent);
+}
+
+.preview__skills li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto 3ch;
+    gap: 12px;
+    align-items: center;
+}
+
+.preview__skills li + li {
+    margin-top: 4px;
+}
+
+.preview__level {
+    color: var(--color-text-muted);
+    font-size: 12px;
+    text-align: right;
+}
+
+.preview__language strong,
+.preview__interest strong {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.preview__language .preview__dots {
+    margin-top: 8px;
+}
+
+.preview__interest {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.preview__initial {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: var(--color-bg-editor);
+    color: var(--accent);
+    font-weight: 600;
+}
+
+/* Mobile: the switch stays on the tab row, where Code and Preview take less height than a row of their own. */
+@media (max-width: 767.98px) {
+    .editor-tabs {
+        flex-wrap: nowrap;
+        height: var(--height-tabs);
+    }
+
+    .tabs {
+        flex-basis: auto;
+        height: auto;
+        border-bottom: 0;
+    }
+
+    .view-modes {
+        padding: 0 4px;
+    }
+
+    .view-modes__button {
+        width: 36px;
+        height: 36px;
+    }
+
+    .preview {
+        padding: 16px 16px 24px;
+        font-size: 15px;
+    }
+
+    .preview__header {
+        gap: 12px;
+    }
+
+    .preview__tile {
+        width: 44px;
+        height: 44px;
+        font-size: 16px;
+    }
+
+    .preview__tile .icon {
+        width: 22px;
+        height: 22px;
+    }
+
+    .preview h1 {
+        font-size: 22px;
+    }
+}
