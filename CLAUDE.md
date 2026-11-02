@@ -23,6 +23,9 @@ Personal resume website styled as a PhpStorm-like IDE. Full specifications: `doc
   `git status` before each commit. Only fake fixtures ("Jane Doe") are versioned.
 - KISS: no over-abstraction, no anticipation of future needs, code meant for a human maintainer.
 - Code style: PHP-CS-Fixer config aligned with the owner's PhpStorm scheme; run it before handing over PHP code.
+- Airy code: a blank line after a block's closing `}` when another statement follows in the same scope, none when it is
+  followed by another closing brace. PHP-CS-Fixer can't enforce it (it only adds blank lines before control structures):
+  the QA checks it.
 - Everything on GitHub and in the repository is in US English (code, docs, commits, issues, PRs, comments), since the
   repository is public. Conversations with the client stay in French.
 - Public content (code, docs, issues, PRs) never mentions the owner's machine, employer or other projects: describe the
