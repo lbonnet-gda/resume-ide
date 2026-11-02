@@ -17,6 +17,7 @@ eyes. Read `CLAUDE.md`, `docs/specifications.md` and the issue before any work.
 
 ## Rules
 
+- Use absolute paths and check the working directory before writing.
 - Do not fix production code yourself: report the problems, the developer fixes them. You only write tests.
 - No nitpicking: only report what a demanding senior developer would block a PR for.
 - Code, comments and docs in US English.
