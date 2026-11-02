@@ -64,6 +64,7 @@ body {
 
 /* position: relative keeps visually hidden labels inside their scroller instead of growing the page. */
 .scrollable,
+.tabs,
 .terminal__body {
     position: relative;
 }
@@ -459,7 +460,22 @@ ol {
 }
 
 .tree__name {
-    flex: none;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* A hint that doesn't fit wraps to a second line, which is clipped: it is either fully visible or hidden. */
+.tree__label {
+    display: flex;
+    flex: 1;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 8px;
+    min-width: 0;
+    height: var(--height-row);
+    overflow: hidden;
+    line-height: var(--height-row);
 }
 
 .tree__name--root {
@@ -467,16 +483,48 @@ ol {
 }
 
 .tree__hint {
-    min-width: 0;
-    margin-left: 2px;
-    overflow: hidden;
+    flex: none;
     color: var(--color-text-muted);
     font-size: 12px;
-    text-overflow: ellipsis;
 }
 
-.tree__row[aria-current="page"] .tree__hint {
+.tree__row[aria-current="page"] .tree__hint,
+.tree-popup.is-selected .tree__hint {
     color: var(--color-text);
+}
+
+/* Overflow popup: same geometry as the row it covers, so the text stays exactly in place. */
+.tree-popup {
+    position: fixed;
+    z-index: 40;
+    width: max-content;
+    background: var(--color-bg-hover);
+    box-shadow: 0 0 0 1px var(--color-scrollbar-thumb-hover), 0 4px 12px rgb(0 0 0 / 0.45);
+    pointer-events: none;
+}
+
+.tree-popup[hidden] {
+    display: none;
+}
+
+.tree-popup.is-selected {
+    background: var(--color-bg-selected);
+}
+
+.tree-popup.is-focused {
+    outline: 2px solid var(--color-focus);
+    outline-offset: -2px;
+}
+
+.tree-popup .tree__label {
+    flex: none;
+    flex-wrap: nowrap;
+    overflow: visible;
+}
+
+.tree-popup .tree__name {
+    flex: none;
+    overflow: visible;
 }
 
 .drawer-backdrop {
@@ -501,10 +549,17 @@ ol {
     border-bottom: 1px solid var(--color-border);
 }
 
+/* No scrollbar: it would take height from the row and move the tabs. Wheel, touch and keyboard still scroll. */
 .tabs {
     flex: 1;
     min-width: 0;
     overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar {
+    display: none;
 }
 
 .tabs__list {

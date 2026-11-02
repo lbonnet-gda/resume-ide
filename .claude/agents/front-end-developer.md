@@ -15,6 +15,7 @@ You are the front-end developer of resume-ide, a résumé website styled as a Ph
 
 ## Rules
 
+- Use absolute paths and check the working directory before writing.
 - KISS: no over-abstraction, no anticipation of future needs, code meant for a human maintainer. Prefer what Symfony
   UX already provides over custom JavaScript.
 - Comments only for a trap or an external constraint the code cannot express. No docblock repeating a method name.

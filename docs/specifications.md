@@ -51,6 +51,8 @@ Same switch as PhpStorm's Markdown editor, top-right of the editor: **Code**, **
 - Code: the file as a source, syntax-highlighted.
 - Preview: a clean rendering of the same data, readable by anyone.
 - Default: Preview for `README.md` and on mobile, Code elsewhere. The last chosen mode is remembered for the session.
+- Following a link from a Preview stays in Preview. Split is hidden when the editor is under 768px wide.
+- In the Code view, URLs and Markdown link targets are clickable with a plain click.
 
 ### 3.4 Files
 
@@ -71,7 +73,7 @@ resume-ide/
 │       └── <Company>.php      # one class per job: dates, role, missions, stack
 ├── .env                       # contact: email, LinkedIn, GitHub (no phone)
 ├── composer.json              # skills, as "require" dependencies with versions as levels
-└── README.md                  # summary: name, title, short pitch
+└── README.md                  # résumé landing page: contact, summary, linked sections
 ```
 
 - The tree is sorted like PhpStorm: folders first, then files, each group alphabetically (case-insensitive).
@@ -100,7 +102,7 @@ Fake shell with a fixed set of commands. Unknown commands print `command not fou
 
 - Downloadable from the top bar button and the `download cv` command.
 - Classic, sober layout (not the IDE look): it must work for HR and ATS software.
-- Contains the phone number, which is not displayed on the website.
+- The public PDF never contains the phone number. The admin can download a version with it, to attach to applications.
 - Generated from Twig templates, cached, regenerated when data changes in the admin.
 
 ### 3.7 Mobile (< 768px)
@@ -121,10 +123,15 @@ Fake shell with a fixed set of commands. Unknown commands print `command not fou
 - **Privacy**: no personal data and no secret in the repository, git history included. The SQLite database, `.env.local`
   and generated PDFs are git-ignored from the first commit. The repository ships fixtures with fake data ("Jane Doe")
   so anyone can clone and run it.
+- **Public contact details**: a dedicated email address rather than a personal one, the city only, no phone number:
+  anything published can be harvested by bots.
 - **No tracking**, no third-party cookies, so no consent banner. The only cookie is the admin session.
 - **Accessibility**: semantic HTML, full keyboard navigation (tree, tabs, terminal), visible focus,
   `prefers-reduced-motion` respected.
 - **SEO**: server-rendered pages, one title/description per file, Open Graph tags for link previews (LinkedIn).
+- **Indexing**: `noindex` by default through an `X-Robots-Tag` header (it covers the PDF too), switchable with an
+  environment variable. `robots.txt` must not block the site, or crawlers would never see the header and link previews
+  could break.
 - **Performance**: no JavaScript build step, pages usable before JavaScript loads.
 
 ## 4. Out of V1 scope
@@ -161,6 +168,7 @@ Final list to be defined in its own issue.
 | Terminal             | Live Component                                          | Commands handled in PHP, same data as the pages  |
 | Client-side behavior | Stimulus                                                | Keyboard shortcuts, history, resizing            |
 | Assets               | AssetMapper                                             | No Node.js, no build step                        |
+| Styles               | Native CSS (custom properties, nesting)                 | Covers the needs without a Sass build step       |
 | Icons                | Symfony UX Icons                                        | File-type icons as inline SVG                    |
 | Syntax highlighting  | Server-side PHP library (tempest/highlight, to confirm) | No JS highlighter, works without JS              |
 | Data                 | Doctrine ORM + SQLite                                   | Single file, git-ignored, no database server     |
@@ -241,6 +249,7 @@ Per feature: issue → mockup if UI → client validation → implementation →
 **M2 — Release**
 
 - Hosting choice, deployment, domain, HTTPS.
+- Legal notice, as required for a website in France (exact content to be checked).
 - Real data entered through the admin.
 - Symfony 8.2 upgrade (if released).
 
