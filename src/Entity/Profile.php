@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 class Profile
@@ -13,27 +14,36 @@ class Profile
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank]
     #[ORM\Column]
     private string $name;
 
+    #[Assert\NotBlank]
     #[ORM\Column]
     private string $title;
 
+    #[Assert\NotBlank]
     #[ORM\Column(type: Types::TEXT)]
     private string $summary;
 
+    #[Assert\NotBlank]
+    #[Assert\Email]
     #[ORM\Column]
     private string $email;
 
+    #[Assert\NotBlank]
     #[ORM\Column]
     private string $phone;
 
+    #[Assert\NotBlank]
     #[ORM\Column]
     private string $location;
 
+    #[Assert\Url(requireTld: true)]
     #[ORM\Column(nullable: true)]
     private ?string $linkedinUrl = null;
 
+    #[Assert\Url(requireTld: true)]
     #[ORM\Column(nullable: true)]
     private ?string $githubUrl = null;
 
