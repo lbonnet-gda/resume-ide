@@ -26,6 +26,8 @@ Personal resume website styled as a PhpStorm-like IDE. Full specifications: `doc
 - Airy code: a blank line after a block's closing `}` when another statement follows in the same scope, none when it is
   followed by another closing brace. PHP-CS-Fixer can't enforce it (it only adds blank lines before control structures):
   the QA checks it.
+- No multiline call opening on the same line as a sibling argument, or followed by a concatenation: use an intermediate
+  variable. PhpStorm and PHP-CS-Fixer indent these differently.
 - Everything on GitHub and in the repository is in US English (code, docs, commits, issues, PRs, comments), since the
   repository is public. Conversations with the client stay in French.
 - Public content (code, docs, issues, PRs) never mentions the owner's machine, employer or other projects: describe the
