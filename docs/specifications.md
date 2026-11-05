@@ -249,6 +249,7 @@ Per feature: issue → mockup if UI → client validation → implementation →
 **M2 — Release**
 
 - Hosting choice, deployment, domain, HTTPS.
+- `trusted_proxies` if the site runs behind a reverse proxy: the login's same-origin check and throttling depend on it.
 - Legal notice, as required for a website in France (exact content to be checked).
 - Real data entered through the admin.
 - Symfony 8.2 upgrade (if released).
