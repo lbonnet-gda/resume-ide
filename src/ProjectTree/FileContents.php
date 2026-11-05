@@ -47,33 +47,46 @@ final class FileContents
 
         $contact = implode(" ·\n", $contact);
 
-        $experienceLines = implode("\n", array_map(
-            static fn (Experience $experience, File $file): string => sprintf(
-                '- [%s](%s), %s (%s)',
-                $experience->getCompany(),
-                $file->path,
-                $experience->getRole(),
-                self::yearRange($experience->getStartDate(), $experience->getEndDate(), "aujourd'hui"),
-            ),
-            $experiences,
-            $experienceFiles,
-        ));
-        $educationLines = implode("\n", array_map(
-            static fn (Education $education, File $file): string => sprintf(
-                '- [%s](%s), %s (%s)',
-                $education->getSchool(),
-                $file->path,
-                $education->getDegree(),
-                self::yearRange($education->getStartDate(), $education->getEndDate(), "aujourd'hui"),
-            ),
-            $educations,
-            $educationFiles,
-        ));
-        $projectLines = implode("\n", array_map(
-            static fn (Project $project, File $file): string => sprintf('- [%s](%s)', $project->getName(), $file->path),
-            $projects,
-            $projectFiles,
-        ));
+        $experienceLines = implode(
+            "\n",
+            array_map(
+                static fn (Experience $experience, File $file): string => sprintf(
+                    '- [%s](%s), %s (%s)',
+                    $experience->getCompany(),
+                    $file->path,
+                    $experience->getRole(),
+                    self::yearRange($experience->getStartDate(), $experience->getEndDate(), "aujourd'hui"),
+                ),
+                $experiences,
+                $experienceFiles,
+            )
+        );
+        $educationLines = implode(
+            "\n",
+            array_map(
+                static fn (Education $education, File $file): string => sprintf(
+                    '- [%s](%s), %s (%s)',
+                    $education->getSchool(),
+                    $file->path,
+                    $education->getDegree(),
+                    self::yearRange($education->getStartDate(), $education->getEndDate(), "aujourd'hui"),
+                ),
+                $educations,
+                $educationFiles,
+            )
+        );
+        $projectLines = implode(
+            "\n",
+            array_map(
+                static fn (Project $project, File $file): string => sprintf(
+                    '- [%s](%s)',
+                    $project->getName(),
+                    $file->path
+                ),
+                $projects,
+                $projectFiles,
+            )
+        );
 
         return <<<MARKDOWN
             # {$profile->getName()}
@@ -125,23 +138,24 @@ final class FileContents
      */
     public static function composerJson(Profile $profile, array $skills): string
     {
-        $packages = FileNames::unique(
-            array_map(
-                static fn (Skill $skill): string => FileNames::slug($skill->getCategory()).'/'.FileNames::slug($skill->getName()),
-                $skills,
-            ),
-            '-',
-        );
-        $versions = array_map(static fn (Skill $skill): string => '^'.$skill->getLevel().'.0', $skills);
+        $packages = [];
 
-        return json_encode(
+        foreach ($skills as $skill) {
+            $packages[] = FileNames::slug($skill->getCategory()).'/'.FileNames::slug($skill->getName());
+        }
+
+        $packages = FileNames::unique($packages, '-');
+        $versions = array_map(static fn (Skill $skill): string => '^'.$skill->getLevel().'.0', $skills);
+        $json = json_encode(
             [
                 'name' => FileNames::slug($profile->getName()).'/resume',
                 'description' => 'Compétences : la version indique le niveau (1 à 5)',
                 'require' => array_combine($packages, $versions),
             ],
             JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR,
-        )."\n";
+        );
+
+        return $json."\n";
     }
 
     public static function experience(string $className, Experience $experience): string
@@ -195,10 +209,16 @@ final class FileContents
      */
     public static function languages(array $languages): string
     {
-        return self::yamlList('languages', array_map(
-            static fn (Language $language): array => ['name' => $language->getName(), 'level' => $language->getLevel()],
-            $languages,
-        ));
+        return self::yamlList(
+            'languages',
+            array_map(
+                static fn (Language $language): array => [
+                    'name' => $language->getName(),
+                    'level' => $language->getLevel(),
+                ],
+                $languages,
+            )
+        );
     }
 
     /**
@@ -206,13 +226,16 @@ final class FileContents
      */
     public static function interests(array $interests): string
     {
-        return self::yamlList('interests', array_map(
-            static fn (Interest $interest): array => [
-                'name' => $interest->getName(),
-                'description' => $interest->getDescription(),
-            ],
-            $interests,
-        ));
+        return self::yamlList(
+            'interests',
+            array_map(
+                static fn (Interest $interest): array => [
+                    'name' => $interest->getName(),
+                    'description' => $interest->getDescription(),
+                ],
+                $interests,
+            )
+        );
     }
 
     public static function yearRange(DateTimeImmutable $start, ?DateTimeImmutable $end, string $ongoing): string

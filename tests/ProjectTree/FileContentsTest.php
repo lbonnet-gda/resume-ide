@@ -74,7 +74,8 @@ final class FileContentsTest extends TestCase
 
     public function testReadmeOmitsMissingContactLinks(): void
     {
-        $readme = FileContents::readme(Entities::profile()->setLinkedinUrl(null)->setGithubUrl(null), [], [], [], [], [], []);
+        $profile = Entities::profile()->setLinkedinUrl(null)->setGithubUrl(null);
+        $readme = FileContents::readme($profile, [], [], [], [], [], []);
 
         self::assertStringContainsString(
             "Lyon, France ·\n[jane.doe@example.com](mailto:jane.doe@example.com)\n\nDix ans",
@@ -184,13 +185,14 @@ final class FileContentsTest extends TestCase
 
     public function testPhpStringsStayValidWhateverTheData(): void
     {
-        $content = FileContents::experience('AcmeCorp', Entities::experience(missions: [
+        $experience = Entities::experience(missions: [
             "Refonte d'une API",
             "L'option \"beta\" à 5$ avec un \\",
             'Le prix en $, avec un \\',
             "Sur\ndeux lignes d'écriture",
             "'; exit; //",
-        ]));
+        ]);
+        $content = FileContents::experience('AcmeCorp', $experience);
 
         self::assertNotEmpty(token_get_all($content, TOKEN_PARSE));
         self::assertStringContainsString('"Refonte d\'une API",', $content);
@@ -205,7 +207,10 @@ final class FileContentsTest extends TestCase
         self::assertSame("# recipe-box\n\nDes recettes.\n\nEt des courses.\n", FileContents::project($project));
 
         $project->setRepositoryUrl('https://git.example.com');
-        self::assertStringEndsWith("courses.\n\n- [Code source](https://git.example.com)\n", FileContents::project($project));
+        self::assertStringEndsWith(
+            "courses.\n\n- [Code source](https://git.example.com)\n",
+            FileContents::project($project),
+        );
 
         $project->setUrl('https://example.com');
         self::assertStringEndsWith(
@@ -244,10 +249,12 @@ final class FileContentsTest extends TestCase
             ["L'été", '- de tout'],
         ];
 
-        $content = FileContents::interests(array_map(
-            static fn (array $interest): Interest => new Interest()->setName($interest[0])->setDescription($interest[1]),
-            $interests,
-        ));
+        $content = FileContents::interests(
+            array_map(
+                static fn (array $row): Interest => new Interest()->setName($row[0])->setDescription($row[1]),
+                $interests,
+            )
+        );
 
         self::assertStringContainsString(
             "interests:\n    -   name: Trail\n        description: Courses en montagne, du 20 au 50 km\n",

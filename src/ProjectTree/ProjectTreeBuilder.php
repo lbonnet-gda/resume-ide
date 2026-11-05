@@ -32,6 +32,15 @@ final class ProjectTreeBuilder
         $experienceFiles = $this->experienceFiles($experiences);
         $educationFiles = $this->educationFiles($educations);
         $projectFiles = $this->projectFiles($projects);
+        $readme = FileContents::readme(
+            $profile,
+            $experiences,
+            $experienceFiles,
+            $educations,
+            $educationFiles,
+            $projects,
+            $projectFiles,
+        );
 
         return new Folder('', [
             new Folder('config', [
@@ -45,15 +54,7 @@ final class ProjectTreeBuilder
             ]),
             new File('.env', FileContents::env($profile)),
             new File('composer.json', FileContents::composerJson($profile, $skills)),
-            new File('README.md', FileContents::readme(
-                $profile,
-                $experiences,
-                $experienceFiles,
-                $educations,
-                $educationFiles,
-                $projects,
-                $projectFiles,
-            )),
+            new File('README.md', $readme),
         ]);
     }
 
@@ -64,10 +65,15 @@ final class ProjectTreeBuilder
      */
     private function experienceFiles(array $experiences): array
     {
-        $classNames = $this->numberedFromOldest(array_map(
-            static fn (Experience $experience): string => FileNames::className($experience->getCompany(), 'Company'),
-            $experiences,
-        ));
+        $classNames = $this->numberedFromOldest(
+            array_map(
+                static fn (Experience $experience): string => FileNames::className(
+                    $experience->getCompany(),
+                    'Company'
+                ),
+                $experiences,
+            )
+        );
 
         return array_map(
             static fn (Experience $experience, string $className): File => new File(
@@ -87,10 +93,12 @@ final class ProjectTreeBuilder
      */
     private function educationFiles(array $educations): array
     {
-        $classNames = $this->numberedFromOldest(array_map(
-            static fn (Education $education): string => FileNames::className($education->getSchool(), 'School'),
-            $educations,
-        ));
+        $classNames = $this->numberedFromOldest(
+            array_map(
+                static fn (Education $education): string => FileNames::className($education->getSchool(), 'School'),
+                $educations,
+            )
+        );
 
         return array_map(
             static fn (Education $education, string $className): File => new File(
