@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jane Doe - CV</title>
+  <link rel="stylesheet" href="print.css">
+  <link rel="stylesheet" href="preview.css">
+</head>
+<body>
+<aside class="mockup-only mockup-bar" lang="en" aria-label="Mockup controls">
+  <p class="mockup-bar__title">PDF résumé mockup. This bar is not printed.</p>
+  <fieldset class="mockup-bar__variants">
+    <legend>Variant</legend>
+    <label><input type="radio" name="variant" id="variant-public" checked> Public PDF (no phone)</label>
+    <label><input type="radio" name="variant" id="variant-admin"> Admin PDF (with phone)</label>
+  </fieldset>
+  <p class="mockup-bar__note">
+    To get the PDF: Ctrl+P, "Save as PDF", paper A4, and turn off "Headers and footers". The selected variant is the one
+    printed.
+  </p>
+  <p class="mockup-bar__note mockup-bar__note--admin">
+    Admin-only version: the phone number is in the contact line, highlighted here on screen only.
+  </p>
+</aside>
+
+<main class="sheet">
+  <header class="header">
+    <h1 class="header__name">Jane Doe</h1>
+    <p class="header__title">Développeuse PHP / Symfony senior</p>
+    <address class="contact">
+      <!-- The real template outputs the phone only in the admin version: never just hide it with CSS as this mockup does. -->
+      <a href="mailto:jane.doe@example.com">jane.doe@example.com</a> ·
+      <span class="contact__phone"><a href="tel:+33639980000">+33 6 39 98 00 00</a> · </span>
+      Lyon, France<br>
+      <a href="https://linkedin.example.com/in/jane-doe">linkedin.example.com/in/jane-doe</a> ·
+      <a href="https://github.example.com/jane-doe">github.example.com/jane-doe</a>
+    </address>
+  </header>
+
+  <section class="section summary">
+    <h2 class="section__title">Profil</h2>
+    <p>Développeuse back-end depuis dix ans, je conçois des applications Symfony robustes et lisibles.</p>
+    <p>J'aime les bases de code propres, les tests qui ont du sens et les équipes qui partagent leurs connaissances.</p>
+  </section>
+
+  <section class="section">
+    <h2 class="section__title">Expérience professionnelle</h2>
+
+    <article class="entry">
+      <h3 class="entry__head">
+        <strong class="entry__title">Lead développeuse Symfony</strong> <span class="entry__place">· Acme Corp, Lyon (hybride)</span>
+        <span class="entry__aside">· <time datetime="2021-09">septembre 2021</time> – aujourd'hui</span>
+      </h3>
+      <ul class="entry__missions">
+        <li>Migration progressive d'un monolithe Symfony 4 vers Symfony 7</li>
+        <li>Mise en place de l'intégration continue et de l'analyse statique</li>
+        <li>Encadrement d'une équipe de quatre développeurs</li>
+      </ul>
+      <p class="entry__stack">Stack&nbsp;: PHP, Symfony, PostgreSQL, Docker, GitHub Actions</p>
+    </article>
+
+    <article class="entry">
+      <h3 class="entry__head">
+        <strong class="entry__title">Développeuse back-end</strong> <span class="entry__place">· Globex, Paris</span>
+        <span class="entry__aside">· <time datetime="2018-03">mars 2018</time> – <time datetime="2021-08">août 2021</time></span>
+      </h3>
+      <ul class="entry__missions">
+        <li>Conception d'une API REST consommée par les applications mobiles</li>
+        <li>Optimisation des requêtes Doctrine sur un catalogue d'un million de produits</li>
+        <li>Écriture des tests fonctionnels des parcours de paiement</li>
+      </ul>
+      <p class="entry__stack">Stack&nbsp;: PHP, Symfony, API Platform, MySQL, Redis</p>
+    </article>
+
+    <article class="entry">
+      <h3 class="entry__head">
+        <strong class="entry__title">Développeuse web</strong> <span class="entry__place">· Initech, Grenoble</span>
+        <span class="entry__aside">· <time datetime="2016-01">janvier 2016</time> – <time datetime="2018-02">février 2018</time></span>
+      </h3>
+      <ul class="entry__missions">
+        <li>Développement de modules métier pour l'intranet de l'entreprise</li>
+        <li>Maintenance d'applications PHP historiques</li>
+      </ul>
+      <p class="entry__stack">Stack&nbsp;: PHP, Symfony, jQuery, MySQL</p>
+    </article>
+
+    <article class="entry">
+      <h3 class="entry__head">
+        <strong class="entry__title">Développeuse stagiaire</strong> <span class="entry__place">· Umbrella Studio, Grenoble</span>
+        <span class="entry__aside">· <time datetime="2015-03">mars 2015</time> – <time datetime="2015-08">août 2015</time></span>
+      </h3>
+      <ul class="entry__missions">
+        <li>Réalisation d'un outil interne de suivi des temps</li>
+      </ul>
+      <p class="entry__stack">Stack&nbsp;: PHP, JavaScript</p>
+    </article>
+  </section>
+
+  <section class="section">
+    <h2 class="section__title">Formation</h2>
+
+    <article class="entry">
+      <h3 class="entry__head">
+        <strong class="entry__title">Master informatique</strong> <span class="entry__place">· Université Grenoble Alpes, Grenoble</span>
+        <span class="entry__aside">· <time datetime="2013-09">septembre 2013</time> – <time datetime="2015-08">août 2015</time></span>
+      </h3>
+      <p>Spécialité génie logiciel.</p>
+    </article>
+
+    <article class="entry">
+      <h3 class="entry__head">
+        <strong class="entry__title">DUT informatique</strong> <span class="entry__place">· IUT de Lyon, Lyon</span>
+        <span class="entry__aside">· <time datetime="2011-09">septembre 2011</time> – <time datetime="2013-06">juin 2013</time></span>
+      </h3>
+    </article>
+  </section>
+
+  <section class="section">
+    <h2 class="section__title">Compétences</h2>
+    <dl class="skills">
+      <div>
+        <dt>Langages&nbsp;:</dt>
+        <dd>PHP, SQL, JavaScript</dd>
+      </div>
+      <div>
+        <dt>Frameworks&nbsp;:</dt>
+        <dd>Symfony, Doctrine, API Platform, Stimulus</dd>
+      </div>
+      <div>
+        <dt>Qualité&nbsp;:</dt>
+        <dd>PHPUnit, PHPStan</dd>
+      </div>
+      <div>
+        <dt>Outils&nbsp;:</dt>
+        <dd>Docker, Git, GitHub Actions</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="section">
+    <h2 class="section__title">Projets</h2>
+
+    <article class="entry">
+      <h3 class="entry__head">
+        <strong class="entry__title">resume-ide</strong>
+        <span class="entry__aside">· <a href="https://resume.example.com">resume.example.com</a> · <a href="https://git.example.com/jane-doe/resume-ide">git.example.com/jane-doe/resume-ide</a></span>
+      </h3>
+      <p>Un CV présenté comme un projet ouvert dans un IDE. Symfony, Live Components et aucune étape de build.</p>
+    </article>
+
+    <article class="entry">
+      <h3 class="entry__head">
+        <strong class="entry__title">recipe-box</strong>
+        <span class="entry__aside">· <a href="https://git.example.com/jane-doe/recipe-box">git.example.com/jane-doe/recipe-box</a></span>
+      </h3>
+      <p>Gestion de recettes de cuisine, avec une liste de courses générée automatiquement.</p>
+    </article>
+
+    <article class="entry">
+      <h3 class="entry__head">
+        <strong class="entry__title">trail-stats</strong>
+        <span class="entry__aside">· <a href="https://trail-stats.example.com">trail-stats.example.com</a></span>
+      </h3>
+      <p>Tableau de bord des sorties de course à pied, alimenté par des fichiers GPX.</p>
+    </article>
+  </section>
+
+  <section class="section">
+    <h2 class="section__title">Langues</h2>
+    <ul class="items">
+      <li><strong>Français</strong>&nbsp;: Langue maternelle</li>
+      <li><strong>Anglais</strong>&nbsp;: Courant (C1)</li>
+      <li><strong>Espagnol</strong>&nbsp;: Intermédiaire (B1)</li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <h2 class="section__title">Centres d'intérêt</h2>
+    <ul class="items">
+      <li><strong>Trail</strong>&nbsp;: Courses en montagne, du 20 au 50 km</li>
+      <li><strong>Cuisine</strong></li>
+      <li><strong>Open source</strong>&nbsp;: Contributions ponctuelles à des projets PHP</li>
+    </ul>
+  </section>
+</main>
+</body>
+</html>

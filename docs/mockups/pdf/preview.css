@@ -1,0 +1,111 @@
+/* Mockup only: the gray backdrop, the A4 sheet and the variant switch. Not part of the résumé template. */
+
+@media print {
+    .mockup-only {
+        display: none;
+    }
+}
+
+html:not(:has(#variant-admin:checked)) .contact__phone {
+    display: none;
+}
+
+@media screen {
+    body {
+        background: #525659;
+    }
+
+    .sheet {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 24px auto;
+        padding: 12mm 15mm;
+        background: #fff;
+        box-shadow: 0 2px 10px rgb(0 0 0 / 50%);
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    a:focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 1px;
+    }
+
+    .mockup-bar {
+        padding: 12px 24px;
+        background: #2b2d30;
+        color: #dfe1e5;
+        font-size: 13px;
+    }
+
+    .mockup-bar__title {
+        margin: 0 0 8px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .mockup-bar__variants {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 16px;
+        margin: 0 0 8px;
+        padding: 0;
+        border: 0;
+    }
+
+    .mockup-bar__variants legend {
+        float: left;
+        margin-right: 16px;
+        padding: 2px 0 0;
+        font-weight: 600;
+    }
+
+    .mockup-bar__variants label {
+        cursor: pointer;
+    }
+
+    .mockup-bar__variants input:focus-visible {
+        outline: 2px solid #8ab4f8;
+        outline-offset: 2px;
+    }
+
+    .mockup-bar__note {
+        margin: 4px 0 0;
+    }
+
+    .mockup-bar__note--admin {
+        display: none;
+        color: #ffd479;
+    }
+
+    html:has(#variant-admin:checked) .mockup-bar__note--admin {
+        display: block;
+    }
+
+    html:has(#variant-admin:checked) .contact__phone a {
+        outline: 1px dashed #8a6d00;
+        background: #fff3cd;
+        color: var(--color-text);
+    }
+}
+
+/* A4 no longer fits. A PDF has no mobile layout: this only keeps the mockup readable on small screens. */
+@media screen and (max-width: 859px) {
+    body {
+        font-size: 11pt;
+    }
+
+    .sheet {
+        width: auto;
+        min-height: 0;
+        margin: 0;
+        padding: 16px;
+        box-shadow: none;
+    }
+
+    .mockup-bar {
+        padding: 12px 16px;
+    }
+}
