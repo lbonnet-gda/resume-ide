@@ -253,7 +253,7 @@ final class FileContentsTest extends TestCase
             array_map(
                 static fn (array $row): Interest => new Interest()->setName($row[0])->setDescription($row[1]),
                 $interests,
-            )
+            ),
         );
 
         self::assertStringContainsString(

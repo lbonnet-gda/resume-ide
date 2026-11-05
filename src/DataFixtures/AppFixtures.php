@@ -24,13 +24,13 @@ class AppFixtures extends Fixture
                 ->setTitle('Développeuse PHP / Symfony senior')
                 ->setSummary(
                     "Développeuse back-end depuis dix ans, je conçois des applications Symfony robustes et lisibles.\n\n"
-                    ."J'aime les bases de code propres, les tests qui ont du sens et les équipes qui partagent leurs connaissances."
+                    ."J'aime les bases de code propres, les tests qui ont du sens et les équipes qui partagent leurs connaissances.",
                 )
                 ->setEmail('jane.doe@example.com')
                 ->setPhone('+33 6 39 98 00 00')
                 ->setLocation('Lyon, France')
                 ->setLinkedinUrl('https://linkedin.example.com/in/jane-doe')
-                ->setGithubUrl('https://github.example.com/jane-doe')
+                ->setGithubUrl('https://github.example.com/jane-doe'),
         );
 
         $experiences = [
@@ -94,7 +94,7 @@ class AppFixtures extends Fixture
                     ->setStartDate(new DateTimeImmutable($start))
                     ->setEndDate($end === null ? null : new DateTimeImmutable($end))
                     ->setMissions($missions)
-                    ->setStack($stack)
+                    ->setStack($stack),
             );
         }
 
@@ -118,7 +118,7 @@ class AppFixtures extends Fixture
                     ->setLocation($location)
                     ->setStartDate(new DateTimeImmutable($start))
                     ->setEndDate(new DateTimeImmutable($end))
-                    ->setDescription($description)
+                    ->setDescription($description),
             );
         }
 
@@ -143,7 +143,7 @@ class AppFixtures extends Fixture
                     ->setName($name)
                     ->setCategory($category)
                     ->setLevel($level)
-                    ->setPosition($position)
+                    ->setPosition($position),
             );
         }
 
@@ -175,7 +175,7 @@ class AppFixtures extends Fixture
                     ->setDescription($description)
                     ->setUrl($url)
                     ->setRepositoryUrl($repositoryUrl)
-                    ->setPosition($position)
+                    ->setPosition($position),
             );
         }
 
@@ -190,7 +190,7 @@ class AppFixtures extends Fixture
                 new Language()
                     ->setName($name)
                     ->setLevel($level)
-                    ->setPosition($position)
+                    ->setPosition($position),
             );
         }
 
@@ -205,7 +205,7 @@ class AppFixtures extends Fixture
                 new Interest()
                     ->setName($name)
                     ->setDescription($description)
-                    ->setPosition($position)
+                    ->setPosition($position),
             );
         }
 

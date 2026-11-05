@@ -69,10 +69,10 @@ final class ProjectTreeBuilder
             array_map(
                 static fn (Experience $experience): string => FileNames::className(
                     $experience->getCompany(),
-                    'Company'
+                    'Company',
                 ),
                 $experiences,
-            )
+            ),
         );
 
         return array_map(
@@ -97,7 +97,7 @@ final class ProjectTreeBuilder
             array_map(
                 static fn (Education $education): string => FileNames::className($education->getSchool(), 'School'),
                 $educations,
-            )
+            ),
         );
 
         return array_map(

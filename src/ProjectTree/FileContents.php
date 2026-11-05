@@ -59,7 +59,7 @@ final class FileContents
                 ),
                 $experiences,
                 $experienceFiles,
-            )
+            ),
         );
         $educationLines = implode(
             "\n",
@@ -73,7 +73,7 @@ final class FileContents
                 ),
                 $educations,
                 $educationFiles,
-            )
+            ),
         );
         $projectLines = implode(
             "\n",
@@ -81,11 +81,11 @@ final class FileContents
                 static fn (Project $project, File $file): string => sprintf(
                     '- [%s](%s)',
                     $project->getName(),
-                    $file->path
+                    $file->path,
                 ),
                 $projects,
                 $projectFiles,
-            )
+            ),
         );
 
         return <<<MARKDOWN
@@ -217,7 +217,7 @@ final class FileContents
                     'level' => $language->getLevel(),
                 ],
                 $languages,
-            )
+            ),
         );
     }
 
@@ -234,7 +234,7 @@ final class FileContents
                     'description' => $interest->getDescription(),
                 ],
                 $interests,
-            )
+            ),
         );
     }
 
