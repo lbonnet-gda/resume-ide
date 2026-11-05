@@ -140,6 +140,7 @@ final class FileContentsTest extends TestCase
                 namespace App\Experience;
 
                 use App\Resume\Experience;
+                use DateTimeImmutable;
 
                 final class AcmeCorp extends Experience
                 {
@@ -149,7 +150,7 @@ final class FileContentsTest extends TestCase
                             company: 'Acme Corp',
                             role: 'Lead développeuse',
                             location: 'Lyon',
-                            startDate: new \DateTimeImmutable('2021-09-01'),
+                            startDate: new DateTimeImmutable('2021-09-01'),
                             endDate: null,
                             missions: [
                                 'Encadrer une équipe',
@@ -173,8 +174,8 @@ final class FileContentsTest extends TestCase
         $withDescription = FileContents::education('IutDeLyon', Entities::education(description: 'Génie logiciel.'));
 
         self::assertStringContainsString(
-            "            startDate: new \\DateTimeImmutable('2011-09-01'),\n"
-            ."            endDate: new \\DateTimeImmutable('2013-06-30'),\n"
+            "            startDate: new DateTimeImmutable('2011-09-01'),\n"
+            ."            endDate: new DateTimeImmutable('2013-06-30'),\n"
             ."            description: null,\n",
             $withoutDescription,
         );

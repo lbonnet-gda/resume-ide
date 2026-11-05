@@ -5,6 +5,7 @@ namespace App\Tests\ProjectTree;
 use App\Entity\Education;
 use App\Entity\Experience;
 use App\Entity\Profile;
+use DateTimeImmutable;
 
 final class Entities
 {
@@ -34,8 +35,8 @@ final class Entities
             ->setCompany($company)
             ->setRole('Lead développeuse')
             ->setLocation('Lyon')
-            ->setStartDate(new \DateTimeImmutable($start))
-            ->setEndDate($end === null ? null : new \DateTimeImmutable($end))
+            ->setStartDate(new DateTimeImmutable($start))
+            ->setEndDate($end === null ? null : new DateTimeImmutable($end))
             ->setMissions($missions)
             ->setStack(['PHP', 'Symfony']);
     }
@@ -50,8 +51,8 @@ final class Entities
             ->setSchool($school)
             ->setDegree('DUT informatique')
             ->setLocation('Lyon')
-            ->setStartDate(new \DateTimeImmutable($start))
-            ->setEndDate(new \DateTimeImmutable($end))
+            ->setStartDate(new DateTimeImmutable($start))
+            ->setEndDate(new DateTimeImmutable($end))
             ->setDescription($description);
     }
 }

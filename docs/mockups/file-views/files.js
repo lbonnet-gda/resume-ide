@@ -170,7 +170,7 @@ const slug = (text) => text
 // Single quotes, except when the string contains one: same rule as PHP-CS-Fixer's single_quote.
 const phpString = (text) => (text.includes("'") ? `"${text}"` : `'${text}'`);
 
-const phpDate = (date) => (date ? `new \\DateTimeImmutable('${date}')` : 'null');
+const phpDate = (date) => (date ? `new DateTimeImmutable('${date}')` : 'null');
 
 const phpClass = (namespace, className, scalars, dates, lists = {}, after = {}) => {
     const scalarArgument = ([key, value]) => `            ${key}: ${value === null ? 'null' : phpString(value)},`;
@@ -181,6 +181,7 @@ const phpClass = (namespace, className, scalars, dates, lists = {}, after = {}) 
         `namespace App\\${namespace};`,
         '',
         `use App\\Resume\\${namespace};`,
+        'use DateTimeImmutable;',
         '',
         `final class ${className} extends ${namespace}`,
         '{',

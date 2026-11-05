@@ -9,6 +9,7 @@ use App\Entity\Language;
 use App\Entity\Profile;
 use App\Entity\Project;
 use App\Entity\Skill;
+use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -87,8 +88,8 @@ class AppFixtures extends Fixture
                 ->setCompany($company)
                 ->setRole($role)
                 ->setLocation($location)
-                ->setStartDate(new \DateTimeImmutable($start))
-                ->setEndDate($end === null ? null : new \DateTimeImmutable($end))
+                ->setStartDate(new DateTimeImmutable($start))
+                ->setEndDate($end === null ? null : new DateTimeImmutable($end))
                 ->setMissions($missions)
                 ->setStack($stack));
         }
@@ -103,8 +104,8 @@ class AppFixtures extends Fixture
                 ->setSchool($school)
                 ->setDegree($degree)
                 ->setLocation($location)
-                ->setStartDate(new \DateTimeImmutable($start))
-                ->setEndDate(new \DateTimeImmutable($end))
+                ->setStartDate(new DateTimeImmutable($start))
+                ->setEndDate(new DateTimeImmutable($end))
                 ->setDescription($description));
         }
 

@@ -9,6 +9,7 @@ use App\Entity\Language;
 use App\Entity\Profile;
 use App\Entity\Project;
 use App\Entity\Skill;
+use DateTimeImmutable;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
 
@@ -214,7 +215,7 @@ final class FileContents
         ));
     }
 
-    public static function yearRange(\DateTimeImmutable $start, ?\DateTimeImmutable $end, string $ongoing): string
+    public static function yearRange(DateTimeImmutable $start, ?DateTimeImmutable $end, string $ongoing): string
     {
         if ($end?->format('Y') === $start->format('Y')) {
             return $start->format('Y');
@@ -224,7 +225,7 @@ final class FileContents
     }
 
     /**
-     * @param array<string, \DateTimeImmutable|list<string>|string|null> $arguments
+     * @param array<string, DateTimeImmutable|list<string>|string|null> $arguments
      */
     private static function phpClass(string $namespace, string $className, array $arguments): string
     {
@@ -242,6 +243,7 @@ final class FileContents
             namespace App\\{$namespace};
 
             use App\\Resume\\{$namespace};
+            use DateTimeImmutable;
 
             final class {$className} extends {$namespace}
             {
@@ -257,16 +259,16 @@ final class FileContents
     }
 
     /**
-     * @param \DateTimeImmutable|list<string>|string|null $value
+     * @param DateTimeImmutable|list<string>|string|null $value
      */
-    private static function phpValue(\DateTimeImmutable|array|string|null $value): string
+    private static function phpValue(DateTimeImmutable|array|string|null $value): string
     {
         if ($value === null) {
             return 'null';
         }
 
-        if ($value instanceof \DateTimeImmutable) {
-            return sprintf("new \\DateTimeImmutable('%s')", $value->format('Y-m-d'));
+        if ($value instanceof DateTimeImmutable) {
+            return sprintf("new DateTimeImmutable('%s')", $value->format('Y-m-d'));
         }
 
         if (is_string($value)) {
