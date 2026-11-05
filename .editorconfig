@@ -18,5 +18,8 @@ indent_size = 2
 trim_trailing_whitespace = false
 
 [*.php]
+ij_php_comma_after_last_argument = true
+ij_php_comma_after_last_match_arm = true
+ij_php_comma_after_last_parameter = true
 ij_php_space_after_type_cast = true
 ij_php_space_before_short_closure_left_parenthesis = true

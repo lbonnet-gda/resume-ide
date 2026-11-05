@@ -28,6 +28,10 @@ return new PhpCsFixer\Config()
         // PhpStorm does not align PHPDoc tags and chops down long throw statements.
         'phpdoc_align' => ['align' => 'left'],
         'single_line_throw' => false,
+        'trailing_comma_in_multiline' => [
+            'after_heredoc' => true,
+            'elements' => ['arguments', 'array_destructuring', 'arrays', 'match', 'parameters'],
+        ],
         'yoda_style' => false,
     ])
     ->setFinder($finder);
