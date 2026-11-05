@@ -1,0 +1,14 @@
+{% props file %}
+
+<footer class="status-bar" data-ide-target="inertWithDrawer">
+  <twig:Breadcrumb :file="file" />
+  {% if file %}
+    <ul class="status-bar__meta" aria-label="File information">
+      <li>1:1</li>
+      <li>LF</li>
+      <li>UTF-8</li>
+      <li>4 spaces</li>
+      <li>{{ {php: 'PHP: 8.4', md: 'Markdown', json: 'JSON', yaml: 'YAML', env: '.env'}[file.name|split('.')|last] }}</li>
+    </ul>
+  {% endif %}
+</footer>

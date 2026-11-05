@@ -1,0 +1,13 @@
+{% props file %}
+
+<nav class="status-bar__path" aria-label="File path">
+  <ol>
+    <li>resume-ide</li>
+    {% if file %}
+      {% set segments = file.path|split('/') %}
+      {% for segment in segments %}
+        <li>{% if loop.last %}<span aria-current="page">{{ segment }}</span>{% else %}{{ segment }}{% endif %}</li>
+      {% endfor %}
+    {% endif %}
+  </ol>
+</nav>

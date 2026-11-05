@@ -53,6 +53,19 @@ final class ProjectTreeBuilderTest extends TestCase
         self::assertNull(self::file($tree, 'projects/recipe-box.md')->dateHint);
     }
 
+    public function testFilesHaveTheirCodeBreadcrumb(): void
+    {
+        $tree = self::tree();
+
+        self::assertSame(['App\\Experience', 'AcmeCorp'], self::file($tree, 'src/Experience/AcmeCorp.php')->breadcrumb);
+        self::assertSame(['App\\Education', 'IutDeLyon'], self::file($tree, 'src/Education/IutDeLyon.php')->breadcrumb);
+        self::assertSame(['Jane Doe'], self::file($tree, 'README.md')->breadcrumb);
+        self::assertSame(['recipe-box'], self::file($tree, 'projects/recipe-box.md')->breadcrumb);
+        self::assertSame(['require'], self::file($tree, 'composer.json')->breadcrumb);
+        self::assertSame(['languages'], self::file($tree, 'config/languages.yaml')->breadcrumb);
+        self::assertSame([], self::file($tree, '.env')->breadcrumb);
+    }
+
     public function testTheOldestOfSeveralEntriesKeepsThePlainName(): void
     {
         $tree = new ProjectTreeBuilder()->build(

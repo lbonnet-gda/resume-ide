@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ file ? file.name : 'File not found' }} – resume-ide{% endblock %}
+
+{% block body %}
+  <div class="ide" id="ide" data-controller="ide" data-action="keydown.esc@document->ide#closeOnEscape click@document->ide#closeBranchSelectorOnOutsideClick turbo:before-cache@document->ide#closeDrawer">
+    <twig:TopBar />
+
+    <div class="workspace" data-ide-target="workspace">
+      <nav class="tool-stripe" aria-label="Tool windows">
+        <button type="button" class="tool-stripe__button" aria-controls="project-tool-window" aria-pressed="true" title="Project" data-ide-target="stripeProject" data-action="ide#toggleProject">
+          {{ ux_icon('project', {class: 'icon'}) }}
+          <span class="visually-hidden">Project</span>
+        </button>
+        <span class="tool-stripe__spacer"></span>
+        <button type="button" class="tool-stripe__button" aria-controls="terminal-body" aria-pressed="true" title="Terminal" data-ide-target="stripeTerminal" data-action="ide#toggleTerminalAndFocus">
+          {{ ux_icon('terminal', {class: 'icon'}) }}
+          <span class="visually-hidden">Terminal</span>
+        </button>
+      </nav>
+
+      <twig:ProjectTree :root="root" :currentPath="file ? file.path : null" />
+
+      <div class="drawer-backdrop" hidden data-ide-target="backdrop" data-action="click->ide#closeDrawer"></div>
+
+      <twig:Editor :file="file" :requestedPath="requestedPath" />
+
+      <twig:Terminal />
+    </div>
+
+    <twig:StatusBar :file="file" />
+  </div>
+{% endblock %}

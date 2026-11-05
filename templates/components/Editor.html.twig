@@ -1,0 +1,28 @@
+{% props file, requestedPath %}
+
+<main class="editor-area" id="editor-area" data-ide-target="inertWithDrawer"{% if file %} data-file-url="{{ path('app_file', {path: file.path}) }}" data-file-name="{{ file.name }}"{% endif %}>
+  <div class="editor-tabs">
+    <twig:Tabs :file="file" />
+  </div>
+
+  <section class="editor scrollable" id="editor" tabindex="0" aria-label="{{ file ? file.name ~ ', source code' : 'Editor, file not found' }}">
+    {% if file %}
+      <h1 class="visually-hidden">{{ file.name }}</h1>
+      <pre class="editor__gutter" aria-hidden="true">{{ range(1, file.content|split("\n")|length)|join("\n") }}</pre>
+      <pre class="editor__code"><code>{{ file.content }}</code></pre>
+      <div class="editor__empty editor__closed">
+        <p>No files are open</p>
+        <p class="editor__empty-hint">Select a file in the Project tool window.</p>
+      </div>
+    {% else %}
+      <div class="editor__empty">
+        <h1>File not found</h1>
+        <p class="editor__empty-hint">There is no file at <kbd>{{ requestedPath }}</kbd>. <a href="{{ path('app_file') }}">Open README.md</a></p>
+      </div>
+    {% endif %}
+  </section>
+
+  {% if file %}
+    <twig:CodeBreadcrumb :segments="file.breadcrumb" />
+  {% endif %}
+</main>

@@ -1,0 +1,12 @@
+{% props file %}
+
+<nav class="tabs" id="tabs" aria-label="Open files" data-turbo-permanent data-controller="tabs" data-action="turbo:load@document->tabs#sync wheel->tabs#scroll:!passive">
+  <ul class="tabs__list" data-tabs-target="list">
+    {% if file %}
+      <twig:Tab :name="file.name" :url="path('app_file', {path: file.path})" :current="true" />
+    {% endif %}
+  </ul>
+  <template data-tabs-target="template">
+    <twig:Tab name="" url="" />
+  </template>
+</nav>
