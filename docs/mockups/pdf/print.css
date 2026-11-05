@@ -1,0 +1,174 @@
+/*
+ * Résumé document: what ends up in the PDF. Sizes are in pt and mm so the screen preview and the print match.
+ * No background color or image: Chrome drops them by default when printing, and only text and borders are needed.
+ * Text is #1a1a1a (17:1 on white) and the accent #1f4e79 (8.7:1), which prints as a dark gray.
+ */
+
+/* Static files on purpose: Chrome embeds a variable font as Type 3 in a PDF, which is worse for text extraction. */
+@font-face {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 400;
+    src: url("fonts/inter-latin-400-normal.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 600;
+    src: url("fonts/inter-latin-600-normal.woff2") format("woff2");
+}
+
+@page {
+    size: A4;
+    margin: 12mm 15mm;
+}
+
+:root {
+    --color-text: #1a1a1a;
+    --color-muted: #4a4a4a;
+    --color-accent: #1f4e79;
+    --color-rule: #8a97a3;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    color: var(--color-text);
+    font-family: "Inter", Arial, Helvetica, sans-serif;
+    font-size: 9.5pt;
+    line-height: 1.3;
+    orphans: 2;
+    widows: 2;
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+dl,
+dd {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Header */
+
+.header {
+    padding-bottom: 2.5mm;
+    border-bottom: 1pt solid var(--color-accent);
+}
+
+.header__name {
+    font-size: 20pt;
+    font-weight: 600;
+    line-height: 1.15;
+}
+
+.header__title {
+    margin-bottom: 1.5mm;
+    color: var(--color-accent);
+    font-size: 11.5pt;
+    font-weight: 600;
+}
+
+.contact {
+    color: var(--color-muted);
+    font-style: normal;
+}
+
+/* Sections */
+
+.section {
+    margin-top: 3.6mm;
+}
+
+.section__title {
+    margin-bottom: 1.5mm;
+    padding-bottom: 0.5mm;
+    border-bottom: 0.5pt solid var(--color-rule);
+    color: var(--color-accent);
+    font-size: 11pt;
+    font-weight: 600;
+    break-after: avoid;
+}
+
+.summary p + p {
+    margin-top: 1mm;
+}
+
+/* Experience, education, projects */
+
+.entry {
+    break-inside: avoid;
+}
+
+.entry + .entry {
+    margin-top: 2mm;
+}
+
+/*
+ * Everything stays inline on purpose. A right-aligned date or a two-column grid leaves a wide gap on the line, and
+ * layout-aware extractors then read it as a separate column: the dates end up detached from their job.
+ */
+.entry__head {
+    font-size: inherit;
+    font-weight: 400;
+}
+
+.entry__title {
+    font-weight: 600;
+}
+
+.entry__aside {
+    color: var(--color-muted);
+}
+
+.entry__missions {
+    padding-left: 4mm;
+}
+
+.entry__stack {
+    color: var(--color-muted);
+}
+
+/* Skills, languages, interests */
+
+.skills {
+    break-inside: avoid;
+}
+
+.skills dt {
+    display: inline;
+    font-weight: 600;
+}
+
+.skills dd {
+    display: inline;
+}
+
+.items {
+    list-style: none;
+    break-inside: avoid;
+}
+
+.items li {
+    display: inline;
+}
+
+.items li + li::before {
+    content: " · ";
+}
+
+.items strong {
+    font-weight: 600;
+}

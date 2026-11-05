@@ -6,3 +6,4 @@ server needed.
 
 - [`ide-layout/`](ide-layout/index.html): main IDE layout, desktop and mobile.
 - [`file-views/`](file-views/index.html): Code, Split and Preview views of each file type, desktop and mobile.
+- [`pdf/`](pdf/index.html): downloadable PDF résumé (A4, print stylesheet), public and admin variants.
