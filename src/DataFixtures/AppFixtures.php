@@ -81,6 +81,7 @@ class AppFixtures extends Fixture
                 ['PHP', 'JavaScript'],
             ],
         ];
+
         foreach ($experiences as [$company, $role, $location, $start, $end, $missions, $stack]) {
             $manager->persist((new Experience())
                 ->setCompany($company)
@@ -96,6 +97,7 @@ class AppFixtures extends Fixture
             ['Université Grenoble Alpes', 'Master informatique', 'Grenoble', '2013-09-01', '2015-08-31', 'Spécialité génie logiciel.'],
             ['IUT de Lyon', 'DUT informatique', 'Lyon', '2011-09-01', '2013-06-30', null],
         ];
+
         foreach ($educations as [$school, $degree, $location, $start, $end, $description]) {
             $manager->persist((new Education())
                 ->setSchool($school)
@@ -120,6 +122,7 @@ class AppFixtures extends Fixture
             ['Git', 'Outils', 5],
             ['GitHub Actions', 'Outils', 3],
         ];
+
         foreach ($skills as $position => [$name, $category, $level]) {
             $manager->persist((new Skill())
                 ->setName($name)
@@ -148,6 +151,7 @@ class AppFixtures extends Fixture
                 null,
             ],
         ];
+
         foreach ($projects as $position => [$name, $description, $url, $repositoryUrl]) {
             $manager->persist((new Project())
                 ->setName($name)
@@ -162,6 +166,7 @@ class AppFixtures extends Fixture
             ['Anglais', 'Courant (C1)'],
             ['Espagnol', 'Intermédiaire (B1)'],
         ];
+
         foreach ($languages as $position => [$name, $level]) {
             $manager->persist((new Language())
                 ->setName($name)
@@ -174,6 +179,7 @@ class AppFixtures extends Fixture
             ['Cuisine', null],
             ['Open source', 'Contributions ponctuelles à des projets PHP'],
         ];
+
         foreach ($interests as $position => [$name, $description]) {
             $manager->persist((new Interest())
                 ->setName($name)

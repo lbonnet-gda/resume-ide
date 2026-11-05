@@ -15,6 +15,9 @@ $finder = (new PhpCsFixer\Finder())
 return (new PhpCsFixer\Config())
     ->setRules([
         '@Symfony' => true,
+        'blank_line_before_statement' => [
+            'statements' => ['return', 'if', 'for', 'foreach', 'while', 'switch', 'try', 'throw'],
+        ],
         // PhpStorm does not align PHPDoc tags and chops down long throw statements.
         'phpdoc_align' => ['align' => 'left'],
         'single_line_throw' => false,
