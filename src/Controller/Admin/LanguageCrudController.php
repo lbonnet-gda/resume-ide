@@ -29,9 +29,9 @@ final class LanguageCrudController extends AbstractCrudController
     {
         yield TextField::new('name');
         yield ChoiceField::new('level')
-            ->setChoices(array_column(LanguageLevel::cases(), null, 'value'))
+            ->setFormTypeOption('choice_label', static fn (LanguageLevel $level): string => $level->label())
             ->renderAsNativeWidget()
-            ->formatValue(static fn (?LanguageLevel $level): ?string => $level?->value);
+            ->formatValue(static fn (?LanguageLevel $level): ?string => $level?->label());
         yield IntegerField::new('position')->setHelp('Lowest first.');
     }
 }
