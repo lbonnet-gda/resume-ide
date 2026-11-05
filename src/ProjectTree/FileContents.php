@@ -214,7 +214,7 @@ final class FileContents
             array_map(
                 static fn (Language $language): array => [
                     'name' => $language->getName(),
-                    'level' => $language->getLevel(),
+                    'level' => $language->getLevel()->value,
                 ],
                 $languages,
             ),
