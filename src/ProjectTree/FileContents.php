@@ -80,21 +80,21 @@ final class FileContents
 
             **{$profile->getTitle()}**
 
-            {$contact}
+            $contact
 
             {$profile->getSummary()}
 
             ## Expériences
 
-            {$experienceLines}
+            $experienceLines
 
             ## Formation
 
-            {$educationLines}
+            $educationLines
 
             ## Projets
 
-            {$projectLines}
+            $projectLines
 
             ## En savoir plus
 
@@ -240,17 +240,17 @@ final class FileContents
         return <<<PHP
             <?php
 
-            namespace App\\{$namespace};
+            namespace App\\$namespace;
 
-            use App\\Resume\\{$namespace};
+            use App\\Resume\\$namespace;
             use DateTimeImmutable;
 
-            final class {$className} extends {$namespace}
+            final class $className extends $namespace
             {
                 public function __construct()
                 {
                     parent::__construct(
-            {$lines}
+            $lines
                     );
                 }
             }
