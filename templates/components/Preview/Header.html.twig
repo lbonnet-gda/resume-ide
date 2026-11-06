@@ -1,0 +1,15 @@
+{% props path, title, subtitle = null, icon = null, initials = null, monospace = false %}
+
+<header class="preview__header">
+  <div class="preview__tile" aria-hidden="true">
+    {%- if icon %}{{ ux_icon(icon, {class: 'icon'}) }}{% else %}{{ initials }}{% endif -%}
+  </div>
+  <div class="preview__identity">
+    <p class="preview__path">{{ path }}</p>
+    <h1{% if monospace %} class="preview__mono"{% endif %}>{{ title }}</h1>
+    {% if subtitle %}
+      <p class="preview__subtitle">{{ subtitle }}</p>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </div>
+</header>

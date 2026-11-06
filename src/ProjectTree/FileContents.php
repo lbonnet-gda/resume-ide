@@ -15,6 +15,21 @@ use Symfony\Component\Yaml\Yaml;
 
 final class FileContents
 {
+    private const array MONTHS = [
+        'janvier',
+        'février',
+        'mars',
+        'avril',
+        'mai',
+        'juin',
+        'juillet',
+        'août',
+        'septembre',
+        'octobre',
+        'novembre',
+        'décembre',
+    ];
+
     /**
      * @param list<Experience> $experiences newest first
      * @param list<File> $experienceFiles in the same order as $experiences
@@ -245,6 +260,24 @@ final class FileContents
         }
 
         return $start->format('Y').' – '.($end?->format('Y') ?? $ongoing);
+    }
+
+    public static function monthRange(DateTimeImmutable $start, ?DateTimeImmutable $end): string
+    {
+        return self::monthYear($start).' – '.($end === null ? "aujourd'hui" : self::monthYear($end));
+    }
+
+    /**
+     * @return list<string>
+     */
+    public static function paragraphs(string $text): array
+    {
+        return preg_split('/\R\s*\R/', trim($text)) ?: [];
+    }
+
+    private static function monthYear(DateTimeImmutable $date): string
+    {
+        return self::MONTHS[(int) $date->format('n') - 1].' '.$date->format('Y');
     }
 
     /**
