@@ -49,7 +49,10 @@
             "phpstan/extension-installer": true
         },
         "bump-after-update": true,
-        "sort-packages": true
+        "sort-packages": true,
+        "audit": {
+            "abandoned": "report"
+        }
     },
     "autoload": {
         "psr-4": {
