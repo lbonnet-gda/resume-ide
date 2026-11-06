@@ -46,6 +46,10 @@ jobs:
                 if: ${{ !cancelled() && steps.install.conclusion == 'success' }}
                 run: docker compose run --rm -T php bin/console lint:yaml config --parse-tags
 
+            -   name: Lint Twig templates
+                if: ${{ !cancelled() && steps.install.conclusion == 'success' }}
+                run: docker compose run --rm -T php bin/console lint:twig templates
+
             -   name: Lint the service container
                 if: ${{ !cancelled() && steps.install.conclusion == 'success' }}
                 run: docker compose run --rm -T php bin/console lint:container

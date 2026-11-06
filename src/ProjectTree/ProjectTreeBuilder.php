@@ -44,8 +44,8 @@ final class ProjectTreeBuilder
 
         return new Folder('', [
             new Folder('config', [
-                new File('config/interests.yaml', FileContents::interests($interests)),
-                new File('config/languages.yaml', FileContents::languages($languages)),
+                new File('config/interests.yaml', FileContents::interests($interests), breadcrumb: ['interests']),
+                new File('config/languages.yaml', FileContents::languages($languages), breadcrumb: ['languages']),
             ]),
             new Folder('projects', $projectFiles),
             new Folder('src', [
@@ -53,8 +53,8 @@ final class ProjectTreeBuilder
                 new Folder('src/Experience', $experienceFiles),
             ]),
             new File('.env', FileContents::env($profile)),
-            new File('composer.json', FileContents::composerJson($profile, $skills)),
-            new File('README.md', $readme),
+            new File('composer.json', FileContents::composerJson($profile, $skills), breadcrumb: ['require']),
+            new File('README.md', $readme, breadcrumb: [$profile->getName()]),
         ]);
     }
 
@@ -80,6 +80,7 @@ final class ProjectTreeBuilder
                 'src/Experience/'.$className.'.php',
                 FileContents::experience($className, $experience),
                 FileContents::yearRange($experience->getStartDate(), $experience->getEndDate(), 'now'),
+                ['App\\Experience', $className],
             ),
             $experiences,
             $classNames,
@@ -105,6 +106,7 @@ final class ProjectTreeBuilder
                 'src/Education/'.$className.'.php',
                 FileContents::education($className, $education),
                 FileContents::yearRange($education->getStartDate(), $education->getEndDate(), 'now'),
+                ['App\\Education', $className],
             ),
             $educations,
             $classNames,
@@ -130,6 +132,7 @@ final class ProjectTreeBuilder
             static fn (Project $project, string $slug): File => new File(
                 'projects/'.$slug.'.md',
                 FileContents::project($project),
+                breadcrumb: [$project->getName()],
             ),
             $projects,
             $slugs,

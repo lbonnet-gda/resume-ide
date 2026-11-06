@@ -1,0 +1,49 @@
+<header class="top-bar" data-ide-target="inertWithDrawer">
+  <button type="button" class="icon-button drawer-toggle" aria-controls="project-tool-window" aria-expanded="false" data-ide-target="drawerToggle" data-action="ide#openDrawer">
+    {{ ux_icon('menu', {class: 'icon'}) }}
+    <span class="visually-hidden">Project files</span>
+  </button>
+
+  <span class="project-widget">
+    <span class="project-widget__badge" aria-hidden="true">RI</span>
+    <span class="project-widget__name" title="resume-ide">resume-ide</span>
+  </span>
+
+  <details class="branch-selector" data-ide-target="branchSelector">
+    <summary class="top-bar__widget">
+      {{ ux_icon('branch', {class: 'icon'}) }}
+      <span><span class="visually-hidden">Branch: </span>main</span>
+      {{ ux_icon('chevron-down', {class: 'icon icon--small'}) }}
+    </summary>
+    <div class="popup">
+      <p class="popup__title">Local branches</p>
+      <ul class="popup__list">
+        <li>
+          <button type="button" class="popup__item" aria-current="true">
+            {{ ux_icon('check', {class: 'icon'}) }}
+            main
+          </button>
+        </li>
+        <li>
+          <button type="button" class="popup__item">
+            <span class="icon" aria-hidden="true"></span>
+            feature/hire-me
+          </button>
+        </li>
+        <li>
+          <button type="button" class="popup__item">
+            <span class="icon" aria-hidden="true"></span>
+            bugfix/coffee-level
+          </button>
+        </li>
+      </ul>
+    </div>
+  </details>
+
+  <span class="top-bar__spacer"></span>
+
+  <a class="button button--primary">
+    {{ ux_icon('download', {class: 'icon'}) }}
+    <span><span class="button__long-label">Download </span>PDF</span>
+  </a>
+</header>

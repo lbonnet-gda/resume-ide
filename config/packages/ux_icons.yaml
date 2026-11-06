@@ -1,0 +1,4 @@
+ux_icons:
+    default_icon_attributes: {}
+    iconify:
+        enabled: false

@@ -1,0 +1,34 @@
+{% props node, depth, currentPath %}
+
+<li class="tree__item">
+  {% if node.children is defined %}
+    <details data-path="{{ node.path }}"{% if depth == 0 or node.path starts with 'src' or currentPath starts with node.path ~ '/' %} open{% endif %}>
+      <summary class="tree__row" style="--depth: {{ depth }}">
+        {{ ux_icon('chevron-right', {class: 'icon tree__chevron'}) }}
+        {{ ux_icon('folder', {class: 'icon icon--folder'}) }}
+        <span class="tree__label">
+          <span class="tree__name{{ depth == 0 ? ' tree__name--root' }}">{{ node.name }}</span>
+          {% if depth == 0 %}
+            <span class="tree__hint">~/{{ node.name }}</span>
+          {% endif %}
+        </span>
+      </summary>
+      <ul class="tree__group">
+        {% for child in node.children %}
+          <twig:TreeNode :node="child" :depth="depth + 1" :currentPath="currentPath" />
+        {% endfor %}
+      </ul>
+    </details>
+  {% else %}
+    <a class="tree__row" href="{{ path('app_file', {path: node.path}) }}" style="--depth: {{ depth }}"{% if node.path == currentPath %} aria-current="page"{% endif %}>
+      <span class="tree__chevron"></span>
+      <twig:FileIcon :name="node.name" />
+      <span class="tree__label">
+        <span class="tree__name">{{ node.name }}</span>
+        {% if node.dateHint %}
+          <span class="tree__hint">{{ node.dateHint }}</span>
+        {% endif %}
+      </span>
+    </a>
+  {% endif %}
+</li>

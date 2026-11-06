@@ -1,0 +1,19 @@
+{% props root, currentPath %}
+
+<aside class="tool-window" id="project-tool-window" aria-labelledby="project-title" data-turbo-permanent data-controller="tree" data-ide-target="toolWindow" data-action="turbo:load@document->tree#sync click->ide#closeDrawerAfterFileChoice">
+  <div class="tool-window__header">
+    <h2 class="tool-window__title" id="project-title">Project</h2>
+    <button type="button" class="icon-button drawer-close" data-action="ide#closeDrawer">
+      {{ ux_icon('close', {class: 'icon'}) }}
+      <span class="visually-hidden">Close project files</span>
+    </button>
+  </div>
+
+  <nav class="tree scrollable" aria-label="Project files" data-tree-target="tree" data-action="keydown->tree#navigate toggle->tree#rememberFolders:capture mouseover->tree#showPopupOnHover mouseleave->tree#hidePopup focusin->tree#showPopupOnFocus focusout->tree#hidePopup click->tree#hidePopup scroll->tree#movePopup">
+    <ul class="tree__group">
+      <twig:TreeNode :node="root" :depth="0" :currentPath="currentPath" />
+    </ul>
+  </nav>
+
+  <div class="tree__row tree-popup" aria-hidden="true" hidden data-tree-target="popup" data-action="keydown.esc@document->tree#hidePopup"></div>
+</aside>

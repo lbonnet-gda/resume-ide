@@ -11,7 +11,9 @@ PDF version. The public repository is part of the deliverable: it is meant to sh
 ## Status
 
 Work in progress. The setup milestone (M0: Symfony skeleton, Docker, code style, static analysis, tests, CI) is done;
-the features come with the MVP milestone (M1). For now the application only serves the admin.
+the MVP milestone (M1) is under way. The IDE layout and the admin work: file tree, tabs, raw source of each file at its
+own URL, on desktop and mobile, and the résumé data edited at `/admin`. Syntax highlighting, the file views, the
+terminal and the PDF are still to come.
 
 Progress is tracked on the public [roadmap](https://github.com/users/lbonnet-gda/projects/1).
 
@@ -19,13 +21,15 @@ Progress is tracked on the public [roadmap](https://github.com/users/lbonnet-gda
 
 - PHP 8.4, Symfony 8.1, served by FrankenPHP in Docker Compose.
 - Doctrine ORM with SQLite: the database is a single git-ignored file, no database server.
+- Twig Components, Symfony UX Turbo and Stimulus, AssetMapper (no Node.js, no build step), native CSS, Symfony UX Icons.
+- Inter and JetBrains Mono, self-hosted in `assets/fonts/` under the SIL Open Font License. No request to a third party.
 - EasyAdmin for the admin.
 - PHP-CS-Fixer, PHPStan (level `max`) and PHPUnit, run by GitHub Actions.
-- Planned for M1: Twig Components, Symfony UX Turbo, Live Component and Stimulus, AssetMapper (no Node.js, no build
-  step), PDF generation with Gotenberg.
+- Planned for M1: Live Component, PDF generation with Gotenberg.
 
-Pages are meant to be server-rendered and usable without JavaScript. Each file of the fake project is generated from
-the database. Details and reasons for each choice: [specifications](docs/specifications.md).
+Pages are server-rendered and usable without JavaScript. Each file of the fake project is generated from the database.
+Opened tabs and panel states stay in the browser's `sessionStorage`: public pages set no cookie, only the admin has a
+session cookie. Details and reasons for each choice: [specifications](docs/specifications.md).
 
 ## Run it locally
 
@@ -47,6 +51,8 @@ To fill the database with the fake "Jane Doe" résumé, in a second terminal (th
 ```bash
 docker compose exec php bin/console doctrine:fixtures:load
 ```
+
+Until the database has a profile, the website only shows a page saying that the résumé is empty (HTTP 503).
 
 The stack runs in the foreground, so use a second terminal for other commands, or add `-d` to start it in the
 background. Stop it with `Ctrl+C` or `docker compose down`.
@@ -101,8 +107,9 @@ docker compose exec php composer test       # PHPUnit
 
 The tests use their own database, `var/data_test.db`, which they migrate when they start.
 
-The CI runs these checks, plus YAML and service container lints and a check of the database schema and fixtures, on
-every pull request and on `main`. The `main` branch is protected: changes go through a pull request with a passing CI.
+The CI runs these checks, plus YAML, Twig and service container lints and a check of the database schema and
+fixtures, on every pull request and on `main`. The `main` branch is protected: changes go through a pull request with a
+passing CI.
 
 ## How it is built
 

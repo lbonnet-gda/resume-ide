@@ -1,0 +1,11 @@
+{% props segments %}
+
+{% if segments %}
+  <nav class="code-breadcrumb" aria-label="Code structure">
+    <ol>
+      {% for segment in segments %}
+        <li>{{ segment }}</li>
+      {% endfor %}
+    </ol>
+  </nav>
+{% endif %}

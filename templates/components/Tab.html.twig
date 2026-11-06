@@ -1,0 +1,12 @@
+{% props name, url, current = false %}
+
+<li class="tab" data-tabs-target="tab" data-url="{{ url }}" data-action="auxclick->tabs#closeOnMiddleClick">
+  <a class="tab__link" href="{{ url }}"{% if current %} aria-current="page"{% endif %}>
+    <twig:FileIcon :name="name" />
+    <span class="tab__name">{{ name }}</span>
+  </a>
+  <button type="button" class="tab__close" data-action="tabs#close">
+    {{ ux_icon('close', {class: 'icon icon--small'}) }}
+    <span class="visually-hidden">Close {{ name }}</span>
+  </button>
+</li>
