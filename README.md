@@ -11,9 +11,9 @@ PDF version. The public repository is part of the deliverable: it is meant to sh
 ## Status
 
 Work in progress. The setup milestone (M0: Symfony skeleton, Docker, code style, static analysis, tests, CI) is done;
-the MVP milestone (M1) is under way. The IDE layout and the admin work: file tree, tabs, raw source of each file at its
-own URL, on desktop and mobile, and the résumé data edited at `/admin`. Syntax highlighting, the file views, the
-terminal and the PDF are still to come.
+the MVP milestone (M1) is under way. The IDE layout, the admin and the PDF work: file tree, tabs, raw source of each
+file at its own URL, on desktop and mobile, the résumé data edited at `/admin`, and the PDF résumé at `/resume.pdf`.
+Syntax highlighting, the file views and the terminal are still to come.
 
 Progress is tracked on the public [roadmap](https://github.com/users/lbonnet-gda/projects/1).
 
@@ -25,7 +25,9 @@ Progress is tracked on the public [roadmap](https://github.com/users/lbonnet-gda
 - Inter and JetBrains Mono, self-hosted in `assets/fonts/` under the SIL Open Font License. No request to a third party.
 - EasyAdmin for the admin.
 - PHP-CS-Fixer, PHPStan (level `max`) and PHPUnit, run by GitHub Actions.
-- Planned for M1: Live Component, PDF generation with Gotenberg.
+- PDF résumé rendered from a Twig template by [Gotenberg](https://gotenberg.dev) (Chromium), a container of the
+  Compose stack. The tests mock it, so the CI doesn't need it.
+- Planned for M1: Live Component.
 
 Pages are server-rendered and usable without JavaScript. Each file of the fake project is generated from the database.
 Opened tabs and panel states stay in the browser's `sessionStorage`: public pages set no cookie, only the admin has a
@@ -93,6 +95,9 @@ holds the bare hash; in a `compose.yaml`, write each `$` as `$$`.
 
 After 5 failed attempts for the same username and IP address, the login is blocked for 15 minutes. The session cookie
 is HTTPS only, so log in through the HTTPS address.
+
+The public PDF at `/resume.pdf` never contains the phone number. The admin menu has a "Download PDF with phone" link,
+for the version to attach to applications. Both are cached and regenerated after any change saved in the admin.
 
 ## Quality checks
 

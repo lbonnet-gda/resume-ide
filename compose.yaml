@@ -17,6 +17,11 @@ services:
       - ${HTTP_PORT:-8000}:80
       - ${HTTPS_PORT:-8443}:${HTTPS_PORT:-8443}
 
+###> sensiolabs/gotenberg-bundle ###
+  gotenberg:
+    image: gotenberg/gotenberg:8
+###< sensiolabs/gotenberg-bundle ###
+
 volumes:
   caddy_data:
   caddy_config:

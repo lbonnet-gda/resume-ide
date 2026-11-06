@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>{{ profile.name }} - CV</title>
+  <style>
+    /*
+     * Static files on purpose: Chrome embeds a variable font as Type 3 in a PDF, which is worse for text extraction.
+     * Gotenberg receives every asset flat, under its base name, which is what gotenberg_asset() returns.
+     */
+    @font-face {
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 400;
+      src: url("{{ gotenberg_asset('fonts/inter/inter-latin-400-normal.woff2') }}") format("woff2");
+    }
+
+    @font-face {
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 600;
+      src: url("{{ gotenberg_asset('fonts/inter/inter-latin-600-normal.woff2') }}") format("woff2");
+    }
+
+    @page {
+      size: A4;
+      margin: 12mm 15mm;
+    }
+
+    :root {
+      --color-text: #1a1a1a;
+      --color-muted: #4a4a4a;
+      --color-accent: #1f4e79;
+      --color-rule: #8a97a3;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--color-text);
+      font-family: "Inter", Arial, Helvetica, sans-serif;
+      font-size: 9.5pt;
+      line-height: 1.3;
+      orphans: 2;
+      widows: 2;
+    }
+
+    h1,
+    h2,
+    h3,
+    p,
+    ul,
+    dl,
+    dd {
+      margin: 0;
+      padding: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .header {
+      padding-bottom: 2.5mm;
+      border-bottom: 1pt solid var(--color-accent);
+    }
+
+    .header__name {
+      font-size: 20pt;
+      font-weight: 600;
+      line-height: 1.15;
+    }
+
+    .header__title {
+      margin-bottom: 1.5mm;
+      color: var(--color-accent);
+      font-size: 11.5pt;
+      font-weight: 600;
+    }
+
+    .contact {
+      color: var(--color-muted);
+      font-style: normal;
+    }
+
+    .section {
+      margin-top: 3.6mm;
+    }
+
+    .section__title {
+      margin-bottom: 1.5mm;
+      padding-bottom: 0.5mm;
+      border-bottom: 0.5pt solid var(--color-rule);
+      color: var(--color-accent);
+      font-size: 11pt;
+      font-weight: 600;
+      break-after: avoid;
+    }
+
+    .summary p + p {
+      margin-top: 1mm;
+    }
+
+    .entry {
+      break-inside: avoid;
+    }
+
+    .entry + .entry {
+      margin-top: 2mm;
+    }
+
+    /*
+     * Everything stays inline on purpose. A right-aligned date or a two-column grid leaves a wide gap on the line, and
+     * layout-aware extractors then read it as a separate column: the dates end up detached from their job.
+     */
+    .entry__head {
+      font-size: inherit;
+      font-weight: 400;
+    }
+
+    .entry__title {
+      font-weight: 600;
+    }
+
+    .entry__aside {
+      color: var(--color-muted);
+    }
+
+    .entry__missions {
+      padding-left: 4mm;
+    }
+
+    .entry__stack {
+      color: var(--color-muted);
+    }
+
+    .skills {
+      break-inside: avoid;
+    }
+
+    .skills dt {
+      display: inline;
+      font-weight: 600;
+    }
+
+    .skills dd {
+      display: inline;
+    }
+
+    .items {
+      list-style: none;
+      break-inside: avoid;
+    }
+
+    .items li {
+      display: inline;
+    }
+
+    .items li + li::before {
+      content: " · ";
+    }
+
+    .items strong {
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header class="header">
+    <h1 class="header__name">{{ profile.name }}</h1>
+    <p class="header__title">{{ profile.title }}</p>
+    <address class="contact">
+      <a href="mailto:{{ profile.email }}">{{ profile.email }}</a> ·
+      {% if phone %}
+        <a href="tel:{{ phone|replace({' ': '', '.': '', '-': ''}) }}">{{ phone }}</a> ·
+      {% endif %}
+      {{ profile.location }}
+      {% if profile.linkedinUrl or profile.githubUrl %}
+        <br>
+        {% if profile.linkedinUrl %}{{ _self.link(profile.linkedinUrl) }}{% endif %}
+        {% if profile.linkedinUrl and profile.githubUrl %} · {% endif %}
+        {% if profile.githubUrl %}{{ _self.link(profile.githubUrl) }}{% endif %}
+      {% endif %}
+    </address>
+  </header>
+
+  <section class="section summary">
+    <h2 class="section__title">Profil</h2>
+    {% for paragraph in summary %}
+      <p>{{ paragraph }}</p>
+    {% endfor %}
+  </section>
+
+  {% if experiences %}
+    <section class="section">
+      <h2 class="section__title">Expérience professionnelle</h2>
+      {% for experience in experiences %}
+        <article class="entry">
+          <h3 class="entry__head">
+            <strong class="entry__title">{{ experience.role }}</strong>
+            <span class="entry__place">· {{ experience.company }}, {{ experience.location }}</span>
+            <span class="entry__aside">· {{ _self.period(experience.startDate, experience.endDate) }}</span>
+          </h3>
+          {% if experience.missions %}
+            <ul class="entry__missions">
+              {% for mission in experience.missions %}
+                <li>{{ mission }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+          {% if experience.stack %}
+            <p class="entry__stack">Stack&nbsp;: {{ experience.stack|join(', ') }}</p>
+          {% endif %}
+        </article>
+      {% endfor %}
+    </section>
+  {% endif %}
+
+  {% if educations %}
+    <section class="section">
+      <h2 class="section__title">Formation</h2>
+      {% for education in educations %}
+        <article class="entry">
+          <h3 class="entry__head">
+            <strong class="entry__title">{{ education.degree }}</strong>
+            <span class="entry__place">· {{ education.school }}, {{ education.location }}</span>
+            <span class="entry__aside">· {{ _self.period(education.startDate, education.endDate) }}</span>
+          </h3>
+          {% if education.description %}
+            <p>{{ education.description }}</p>
+          {% endif %}
+        </article>
+      {% endfor %}
+    </section>
+  {% endif %}
+
+  {% if skills %}
+    <section class="section">
+      <h2 class="section__title">Compétences</h2>
+      <dl class="skills">
+        {% for category, names in skills %}
+          <div>
+            <dt>{{ category }}&nbsp;:</dt>
+            <dd>{{ names|join(', ') }}</dd>
+          </div>
+        {% endfor %}
+      </dl>
+    </section>
+  {% endif %}
+
+  {% if projects %}
+    <section class="section">
+      <h2 class="section__title">Projets</h2>
+      {% for project in projects %}
+        <article class="entry">
+          <h3 class="entry__head">
+            <strong class="entry__title">{{ project.name }}</strong>
+            {% if project.url or project.repositoryUrl %}
+              <span class="entry__aside">
+                {%- if project.url %} · {{ _self.link(project.url) }}{% endif -%}
+                {%- if project.repositoryUrl %} · {{ _self.link(project.repositoryUrl) }}{% endif -%}
+              </span>
+            {% endif %}
+          </h3>
+          <p>{{ project.description }}</p>
+        </article>
+      {% endfor %}
+    </section>
+  {% endif %}
+
+  {% if languages %}
+    <section class="section">
+      <h2 class="section__title">Langues</h2>
+      <ul class="items">
+        {% for language in languages %}
+          <li><strong>{{ language.name }}</strong>&nbsp;: {{ language.level.frenchLabel }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+
+  {% if interests %}
+    <section class="section">
+      <h2 class="section__title">Centres d'intérêt</h2>
+      <ul class="items">
+        {% for interest in interests %}
+          <li><strong>{{ interest.name }}</strong>{% if interest.description %}&nbsp;: {{ interest.description }}{% endif %}</li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+</main>
+</body>
+</html>
+
+{% macro link(url) %}<a href="{{ url }}">{{ url|split('://')|last|trim('/', 'right') }}</a>{% endmacro %}
+
+{% macro period(start, end) %}
+  <time datetime="{{ start|date('Y-m') }}">{{ start|format_date(pattern: 'MMMM y', locale: 'fr') }}</time> –
+  {% if end %}
+    <time datetime="{{ end|date('Y-m') }}">{{ end|format_date(pattern: 'MMMM y', locale: 'fr') }}</time>
+  {% else %}
+    aujourd'hui
+  {% endif %}
+{% endmacro %}
