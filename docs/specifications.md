@@ -171,7 +171,7 @@ Final list to be defined in its own issue.
 | Assets               | AssetMapper                                             | No Node.js, no build step                        |
 | Styles               | Native CSS (custom properties, nesting)                 | Covers the needs without a Sass build step       |
 | Icons                | Symfony UX Icons                                        | File-type icons as inline SVG                    |
-| Syntax highlighting  | Server-side PHP library (tempest/highlight, to confirm) | No JS highlighter, works without JS              |
+| Syntax highlighting  | Hand-written server-side highlighter (Twig filter)      | Only our generated formats; no JS, real links    |
 | Data                 | Doctrine ORM + SQLite                                   | Single file, git-ignored, no database server     |
 | Admin                | EasyAdmin + Security                                    | Standard, little code                            |
 | PDF                  | Gotenberg via sensiolabs/gotenberg-bundle               | Chrome rendering from Twig templates             |
