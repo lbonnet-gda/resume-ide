@@ -10,12 +10,12 @@ use Doctrine\Migrations\AbstractMigration;
 final class Version20261106092634 extends AbstractMigration
 {
     private const array LEVELS = [
-        'Débutant (A1)' => 'A1',
-        'Élémentaire (A2)' => 'A2',
-        'Intermédiaire (B1)' => 'B1',
-        'Avancé (B2)' => 'B2',
-        'Courant (C1)' => 'C1',
-        'Bilingue (C2)' => 'C2',
+        'Débutant (A1)' => 'a1',
+        'Élémentaire (A2)' => 'a2',
+        'Intermédiaire (B1)' => 'b1',
+        'Avancé (B2)' => 'b2',
+        'Courant (C1)' => 'c1',
+        'Bilingue (C2)' => 'c2',
         'Langue maternelle' => 'native',
     ];
 

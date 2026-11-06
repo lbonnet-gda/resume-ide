@@ -4,12 +4,12 @@ namespace App\Enum;
 
 enum LanguageLevel: string
 {
-    case A1 = 'A1';
-    case A2 = 'A2';
-    case B1 = 'B1';
-    case B2 = 'B2';
-    case C1 = 'C1';
-    case C2 = 'C2';
+    case A1 = 'a1';
+    case A2 = 'a2';
+    case B1 = 'b1';
+    case B2 = 'b2';
+    case C1 = 'c1';
+    case C2 = 'c2';
     case Native = 'native';
 
     public function label(): string
