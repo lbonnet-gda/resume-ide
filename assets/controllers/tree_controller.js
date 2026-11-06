@@ -135,7 +135,6 @@ export default class extends Controller {
         this.popupTarget.hidden = true;
     }
 
-    // Same geometry as the row it covers, so the text stays exactly in place.
     showPopup(row) {
         const box = row.getBoundingClientRect();
         const panel = this.treeTarget.getBoundingClientRect();

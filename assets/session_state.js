@@ -12,6 +12,5 @@ export function save(key, value) {
     try {
         sessionStorage.setItem(key, JSON.stringify(value));
     } catch {
-        // See above.
     }
 }
