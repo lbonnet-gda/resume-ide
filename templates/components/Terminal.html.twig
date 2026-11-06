@@ -1,4 +1,4 @@
-<section class="terminal" id="terminal" aria-labelledby="terminal-title" data-turbo-permanent data-controller="terminal" data-ide-target="terminal inertWithDrawer" data-action="click->terminal#focusInput">
+<section class="terminal" id="terminal" aria-labelledby="terminal-title" data-turbo-permanent data-controller="terminal" data-ide-target="terminal inertWithDrawer" data-action="click->terminal#focusInput terminal:open->terminal#open terminal:complete->terminal#completed">
   <div class="terminal__header">
     <h2 class="terminal__title" id="terminal-title">Terminal</h2>
     <span class="terminal__session">Local</span>
@@ -8,12 +8,5 @@
       <span class="visually-hidden">Terminal panel</span>
     </button>
   </div>
-  <div class="terminal__body" id="terminal-body" tabindex="0" role="group" aria-label="Terminal session">
-    <form class="terminal__input-line" autocomplete="off" data-action="submit->terminal#ignoreCommand">
-      <label class="terminal__prompt" for="terminal-input">
-        <span class="visually-hidden">Command, in </span>visitor@resume-ide:~$
-      </label>
-      <input class="terminal__input" id="terminal-input" type="text" spellcheck="false" autocapitalize="off" data-terminal-target="input" data-ide-target="terminalInput">
-    </form>
-  </div>
+  <twig:TerminalSession id="terminal-body" />
 </section>
