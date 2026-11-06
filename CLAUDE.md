@@ -15,6 +15,8 @@ Personal resume website styled as a PhpStorm-like IDE. Full specifications: `doc
   developer, then to the QA. Exceptions: project management docs (`docs/specifications.md`, `CLAUDE.md`,
   `.claude/agents/`) and GitHub/git operations.
 - Mockups live in `docs/mockups/`.
+- Every agent works in its own git worktree, next to the main checkout (e.g. `../resume-ide-<issue>`): the main checkout
+  belongs to the client.
 - Keep the GitHub Project board in sync: move an issue to "In progress" (and assign it) as soon as work on it starts.
 
 ## Rules
