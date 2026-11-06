@@ -154,7 +154,8 @@ Final list to be defined in its own issue.
 
 - Light theme (could be an achievement reward).
 - English version of the résumé, with a language switch in the UI and a terminal command. Planned after the release,
-  not designed for in V1.
+  not designed for in V1. It will move every displayed text to translation files: the labels hard-coded in
+  `FileContents`, and `LanguageLevel::label()` / `frenchLabel()`, replaced by `trans()` (`TranslatableInterface`).
 - `bin/console resume:show`: the résumé rendered in a real terminal.
 - Visit analytics (privacy-friendly, self-hosted).
 
