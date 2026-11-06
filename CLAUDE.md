@@ -28,6 +28,8 @@ Personal resume website styled as a PhpStorm-like IDE. Full specifications: `doc
   the QA checks it.
 - No multiline call opening on the same line as a sibling argument, or followed by a concatenation: use an intermediate
   variable. PhpStorm and PHP-CS-Fixer indent these differently.
+- `@throws` only when the caller is expected to handle the exception (it's part of the method's contract), not for an
+  exception that would only signal a bug.
 - Everything on GitHub and in the repository is in US English (code, docs, commits, issues, PRs, comments), since the
   repository is public. Conversations with the client stay in French.
 - Public content (code, docs, issues, PRs) never mentions the owner's machine, employer or other projects: describe the
