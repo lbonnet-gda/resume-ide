@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
+use App\Enum\LanguageLevel;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 class Language
@@ -12,11 +14,12 @@ class Language
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank]
     #[ORM\Column]
     private string $name;
 
-    #[ORM\Column]
-    private string $level;
+    #[ORM\Column(enumType: LanguageLevel::class)]
+    private LanguageLevel $level;
 
     #[ORM\Column]
     private int $position = 0;
@@ -38,12 +41,12 @@ class Language
         return $this;
     }
 
-    public function getLevel(): string
+    public function getLevel(): LanguageLevel
     {
         return $this->level;
     }
 
-    public function setLevel(string $level): static
+    public function setLevel(LanguageLevel $level): static
     {
         $this->level = $level;
 

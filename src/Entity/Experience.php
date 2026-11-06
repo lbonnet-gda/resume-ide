@@ -5,6 +5,7 @@ namespace App\Entity;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 class Experience
@@ -14,12 +15,15 @@ class Experience
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank]
     #[ORM\Column]
     private string $company;
 
+    #[Assert\NotBlank]
     #[ORM\Column]
     private string $role;
 
+    #[Assert\NotBlank]
     #[ORM\Column]
     private string $location;
 
@@ -111,11 +115,12 @@ class Experience
     }
 
     /**
-     * @param list<string> $missions
+     * @param array<string> $missions
      */
     public function setMissions(array $missions): static
     {
-        $this->missions = $missions;
+        // Removing an item in the admin form leaves a gap in the keys, which JSON would store as an object.
+        $this->missions = array_values($missions);
 
         return $this;
     }
@@ -129,11 +134,11 @@ class Experience
     }
 
     /**
-     * @param list<string> $stack
+     * @param array<string> $stack
      */
     public function setStack(array $stack): static
     {
-        $this->stack = $stack;
+        $this->stack = array_values($stack);
 
         return $this;
     }

@@ -11,8 +11,9 @@ PDF version. The public repository is part of the deliverable: it is meant to sh
 ## Status
 
 Work in progress. The setup milestone (M0: Symfony skeleton, Docker, code style, static analysis, tests, CI) is done;
-the MVP milestone (M1) is under way. The IDE layout works: file tree, tabs, raw source of each file at its own URL, on
-desktop and mobile. Syntax highlighting, the file views, the terminal commands, the PDF and the admin are still to come.
+the MVP milestone (M1) is under way. The IDE layout and the admin work: file tree, tabs, raw source of each file at its
+own URL, on desktop and mobile, and the résumé data edited at `/admin`. Syntax highlighting, the file views, the
+terminal and the PDF are still to come.
 
 Progress is tracked on the public [roadmap](https://github.com/users/lbonnet-gda/projects/1).
 
@@ -22,12 +23,13 @@ Progress is tracked on the public [roadmap](https://github.com/users/lbonnet-gda
 - Doctrine ORM with SQLite: the database is a single git-ignored file, no database server.
 - Twig Components, Symfony UX Turbo and Stimulus, AssetMapper (no Node.js, no build step), native CSS, Symfony UX Icons.
 - Inter and JetBrains Mono, self-hosted in `assets/fonts/` under the SIL Open Font License. No request to a third party.
+- EasyAdmin for the admin.
 - PHP-CS-Fixer, PHPStan (level `max`) and PHPUnit, run by GitHub Actions.
-- Planned for M1: Live Component, EasyAdmin, PDF generation with Gotenberg.
+- Planned for M1: Live Component, PDF generation with Gotenberg.
 
 Pages are server-rendered and usable without JavaScript. Each file of the fake project is generated from the database.
-Opened tabs and panel states stay in the browser's `sessionStorage`: the site sets no cookie. Details and reasons for
-each choice: [specifications](docs/specifications.md).
+Opened tabs and panel states stay in the browser's `sessionStorage`: public pages set no cookie, only the admin has a
+session cookie. Details and reasons for each choice: [specifications](docs/specifications.md).
 
 ## Run it locally
 
@@ -69,6 +71,29 @@ background. Stop it with `Ctrl+C` or `docker compose down`.
   docker compose cp php:/data/caddy/pki/authorities/local/root.crt ~/resume-ide-root.crt
   ```
 
+## Admin
+
+The résumé data is edited at https://localhost:8443/admin, with a single account. The versioned `.env` has no password
+hash, so nobody can log in until you set one. Generate a hash (the command prompts for the password):
+
+```bash
+docker compose exec php bin/console security:hash-password
+```
+
+Then create a git-ignored `.env.local` at the root of the project:
+
+```dotenv
+ADMIN_USERNAME=jane
+ADMIN_PASSWORD_HASH='$2y$13$...'
+```
+
+Keep the single quotes: without them, or with double quotes, Dotenv reads `$...` as a variable and silently corrupts the
+hash, and the login then always fails. A real environment variable takes precedence and is not parsed by Dotenv, so it
+holds the bare hash; in a `compose.yaml`, write each `$` as `$$`.
+
+After 5 failed attempts for the same username and IP address, the login is blocked for 15 minutes. The session cookie
+is HTTPS only, so log in through the HTTPS address.
+
 ## Quality checks
 
 With the stack running:
@@ -80,8 +105,11 @@ docker compose exec php composer phpstan    # static analysis
 docker compose exec php composer test       # PHPUnit
 ```
 
-The CI runs these checks, plus YAML, Twig and service container lints and a check of the database schema and fixtures, on
-every pull request and on `main`. The `main` branch is protected: changes go through a pull request with a passing CI.
+The tests use their own database, `var/data_test.db`, which they migrate when they start.
+
+The CI runs these checks, plus YAML, Twig and service container lints and a check of the database schema and
+fixtures, on every pull request and on `main`. The `main` branch is protected: changes go through a pull request with a
+passing CI.
 
 ## How it is built
 

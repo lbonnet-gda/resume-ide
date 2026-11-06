@@ -13,6 +13,12 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
 
+when@test:
+    doctrine:
+        dbal:
+            # Not an env var: a real DATABASE_URL wins over .env files, and the tests empty tables.
+            url: 'sqlite:///%kernel.project_dir%/var/data_test.db'
+
 when@prod:
     doctrine:
         orm:

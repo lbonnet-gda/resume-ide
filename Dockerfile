@@ -9,6 +9,8 @@ RUN apt-get update \
 
 COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
 
+RUN install-php-extensions intl
+
 RUN cp "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 # Same uid/gid as the host user, so files written to the bind-mounted project are not owned by root.

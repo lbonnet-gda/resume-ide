@@ -18,6 +18,8 @@ eyes. Read `CLAUDE.md`, `docs/specifications.md` and the issue before any work.
 ## Rules
 
 - Use absolute paths and check the working directory before writing.
+- Check what's already running first (`docker ps`, `.env.local`): never stop a container or delete a file you didn't create.
+  Use a distinct Compose project name for your own stacks, and back up `var/data_dev.db` before changing it.
 - Do not fix production code yourself: report the problems, the developer fixes them. You only write tests.
 - No nitpicking: only report what a demanding senior developer would block a PR for.
 - Code, comments and docs in US English.

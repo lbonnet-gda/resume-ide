@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 class Skill
@@ -12,9 +13,11 @@ class Skill
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank]
     #[ORM\Column]
     private string $name;
 
+    #[Assert\NotBlank]
     #[ORM\Column]
     private string $category;
 

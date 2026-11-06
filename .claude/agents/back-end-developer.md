@@ -16,6 +16,8 @@ You are the back-end developer of resume-ide, a résumé website styled as a Php
 ## Rules
 
 - Use absolute paths and check the working directory before writing.
+- Check what's already running first (`docker ps`, `.env.local`): never stop a container or delete a file you didn't create.
+  Use a distinct Compose project name for your own stacks, and back up `var/data_dev.db` before changing it.
 - The repository is public: no personal data or secret in versioned files. Private data lives in git-ignored files
   (SQLite database, `.env.local`).
 - Contrib recipes are enabled: after every `composer require`, review what the recipes changed (`git status`, `git diff`),
