@@ -11,7 +11,7 @@ PDF version. The public repository is part of the deliverable: it is meant to sh
 ## Status
 
 Work in progress. The setup milestone (M0: Symfony skeleton, Docker, code style, static analysis, tests, CI) is done;
-the features come with the MVP milestone (M1). For now the application only serves the Symfony welcome page.
+the features come with the MVP milestone (M1). For now the application only serves the admin.
 
 Progress is tracked on the public [roadmap](https://github.com/users/lbonnet-gda/projects/1).
 
@@ -19,9 +19,10 @@ Progress is tracked on the public [roadmap](https://github.com/users/lbonnet-gda
 
 - PHP 8.4, Symfony 8.1, served by FrankenPHP in Docker Compose.
 - Doctrine ORM with SQLite: the database is a single git-ignored file, no database server.
+- EasyAdmin for the admin.
 - PHP-CS-Fixer, PHPStan (level `max`) and PHPUnit, run by GitHub Actions.
 - Planned for M1: Twig Components, Symfony UX Turbo, Live Component and Stimulus, AssetMapper (no Node.js, no build
-  step), EasyAdmin, PDF generation with Gotenberg.
+  step), PDF generation with Gotenberg.
 
 Pages are meant to be server-rendered and usable without JavaScript. Each file of the fake project is generated from
 the database. Details and reasons for each choice: [specifications](docs/specifications.md).
@@ -64,6 +65,29 @@ background. Stop it with `Ctrl+C` or `docker compose down`.
   docker compose cp php:/data/caddy/pki/authorities/local/root.crt ~/resume-ide-root.crt
   ```
 
+## Admin
+
+The résumé data is edited at https://localhost:8443/admin, with a single account. The versioned `.env` has no password
+hash, so nobody can log in until you set one. Generate a hash (the command prompts for the password):
+
+```bash
+docker compose exec php bin/console security:hash-password
+```
+
+Then create a git-ignored `.env.local` at the root of the project:
+
+```dotenv
+ADMIN_USERNAME=jane
+ADMIN_PASSWORD_HASH='$2y$13$...'
+```
+
+Keep the single quotes: without them, or with double quotes, Dotenv reads `$...` as a variable and silently corrupts the
+hash, and the login then always fails. A real environment variable takes precedence and is not parsed by Dotenv, so it
+holds the bare hash; in a `compose.yaml`, write each `$` as `$$`.
+
+After 5 failed attempts for the same username and IP address, the login is blocked for 15 minutes. The session cookie
+is HTTPS only, so log in through the HTTPS address.
+
 ## Quality checks
 
 With the stack running:
@@ -74,6 +98,8 @@ docker compose exec php composer cs-fix     # fix the code style
 docker compose exec php composer phpstan    # static analysis
 docker compose exec php composer test       # PHPUnit
 ```
+
+The tests use their own database, `var/data_test.db`, which they migrate when they start.
 
 The CI runs these checks, plus YAML and service container lints and a check of the database schema and fixtures, on
 every pull request and on `main`. The `main` branch is protected: changes go through a pull request with a passing CI.

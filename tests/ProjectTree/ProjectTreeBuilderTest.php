@@ -6,6 +6,7 @@ use App\Entity\Interest;
 use App\Entity\Language;
 use App\Entity\Project;
 use App\Entity\Skill;
+use App\Enum\LanguageLevel;
 use App\ProjectTree\File;
 use App\ProjectTree\Folder;
 use App\ProjectTree\ProjectTreeBuilder;
@@ -116,7 +117,7 @@ final class ProjectTreeBuilderTest extends TestCase
                 new Project()->setName('resume-ide')->setDescription('Ce CV.'),
                 new Project()->setName('recipe-box')->setDescription('Des recettes.'),
             ],
-            [new Language()->setName('Français')->setLevel('Langue maternelle')],
+            [new Language()->setName('Français')->setLevel(LanguageLevel::Native)],
             [new Interest()->setName('Trail')],
         );
     }

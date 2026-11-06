@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 class Project
@@ -13,15 +14,19 @@ class Project
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank]
     #[ORM\Column]
     private string $name;
 
+    #[Assert\NotBlank]
     #[ORM\Column(type: Types::TEXT)]
     private string $description;
 
+    #[Assert\Url(requireTld: true)]
     #[ORM\Column(nullable: true)]
     private ?string $url = null;
 
+    #[Assert\Url(requireTld: true)]
     #[ORM\Column(nullable: true)]
     private ?string $repositoryUrl = null;
 

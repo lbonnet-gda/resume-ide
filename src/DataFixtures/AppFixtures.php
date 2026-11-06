@@ -9,6 +9,7 @@ use App\Entity\Language;
 use App\Entity\Profile;
 use App\Entity\Project;
 use App\Entity\Skill;
+use App\Enum\LanguageLevel;
 use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -180,9 +181,9 @@ class AppFixtures extends Fixture
         }
 
         $languages = [
-            ['Français', 'Langue maternelle'],
-            ['Anglais', 'Courant (C1)'],
-            ['Espagnol', 'Intermédiaire (B1)'],
+            ['Français', LanguageLevel::Native],
+            ['Anglais', LanguageLevel::C1],
+            ['Espagnol', LanguageLevel::B1],
         ];
 
         foreach ($languages as $position => [$name, $level]) {
