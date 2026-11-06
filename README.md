@@ -11,9 +11,9 @@ PDF version. The public repository is part of the deliverable: it is meant to sh
 ## Status
 
 Work in progress. The setup milestone (M0: Symfony skeleton, Docker, code style, static analysis, tests, CI) is done;
-the MVP milestone (M1) is under way. The IDE layout and the admin work: file tree, tabs, raw source of each file at its
-own URL, on desktop and mobile, and the résumé data edited at `/admin`. Syntax highlighting, the file views, the
-terminal and the PDF are still to come.
+the MVP milestone (M1) is under way. The IDE layout and the admin work: file tree, tabs, each file at its own URL with
+syntax highlighting and Code, Split and Preview views, on desktop and mobile, and the résumé data edited at `/admin`.
+The terminal and the PDF are still to come.
 
 Progress is tracked on the public [roadmap](https://github.com/users/lbonnet-gda/projects/1).
 

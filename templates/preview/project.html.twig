@@ -1,0 +1,32 @@
+<twig:Preview:Header :path="file.path" :title="project.name" icon="box" :monospace="true" />
+
+<div class="preview__lead">
+  {% for paragraph in description %}
+    <p>{{ paragraph }}</p>
+  {% endfor %}
+</div>
+
+{% if project.url or project.repositoryUrl %}
+  <ul class="preview__actions">
+    {% if project.url %}
+      <li>{{ ux_icon('globe', {class: 'icon'}) }}<twig:Preview:ExternalLink :url="project.url" label="Site" /></li>
+    {% endif %}
+    {% if project.repositoryUrl %}
+      <li>{{ ux_icon('code', {class: 'icon'}) }}<twig:Preview:ExternalLink :url="project.repositoryUrl" label="Code source" /></li>
+    {% endif %}
+  </ul>
+{% endif %}
+
+{% if otherProjects %}
+  <section class="preview__section">
+    <h2>Autres projets</h2>
+    <ul class="preview__grid">
+      {% for other in otherProjects %}
+        <li class="preview__card">
+          <span class="preview__mono"><a href="{{ path('app_file', {path: other.path}|merge(linkParameters)) }}">{{ other.name }}</a></span>
+          <span class="preview__card-text">{{ other.summary }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+{% endif %}

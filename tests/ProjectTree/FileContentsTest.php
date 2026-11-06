@@ -25,14 +25,14 @@ final class FileContentsTest extends TestCase
                 Entities::experience('Umbrella', '2015-03-01', '2015-08-31'),
             ],
             [
-                new File('src/Experience/AcmeCorp2.php', ''),
-                new File('src/Experience/Globex.php', ''),
-                new File('src/Experience/Umbrella.php', ''),
+                new File('src/Experience/AcmeCorp2.php', '', 'experience'),
+                new File('src/Experience/Globex.php', '', 'experience'),
+                new File('src/Experience/Umbrella.php', '', 'experience'),
             ],
             [Entities::education()],
-            [new File('src/Education/IutDeLyon.php', '')],
+            [new File('src/Education/IutDeLyon.php', '', 'education')],
             [new Project()->setName('Recipe Box')->setDescription('Des recettes.')],
-            [new File('projects/recipe-box.md', '')],
+            [new File('projects/recipe-box.md', '', 'project')],
         );
 
         self::assertSame(
@@ -270,6 +270,14 @@ final class FileContentsTest extends TestCase
                 ),
             ],
             Yaml::parse($content),
+        );
+    }
+
+    public function testParagraphsAreSplitOnBlankLinesWhateverTheLineEndings(): void
+    {
+        self::assertSame(
+            ['Un.', "Deux,\nsuite.", 'Trois.'],
+            FileContents::paragraphs("Un.\r\n\r\nDeux,\nsuite.\n\n\nTrois.\n"),
         );
     }
 }

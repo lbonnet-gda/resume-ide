@@ -1,0 +1,15 @@
+<twig:Preview:Header :path="file.path" title="Centres d'intérêt" icon="heart" />
+
+<ul class="preview__grid">
+  {% for interest in interests %}
+    <li class="preview__card preview__interest">
+      <span class="preview__initial" aria-hidden="true">{{ interest.name|first }}</span>
+      <div>
+        <strong>{{ interest.name }}</strong>
+        {% if interest.description %}
+          <span class="preview__card-text">{{ interest.description }}</span>
+        {% endif %}
+      </div>
+    </li>
+  {% endfor %}
+</ul>

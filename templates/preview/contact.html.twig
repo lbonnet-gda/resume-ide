@@ -1,0 +1,23 @@
+<twig:Preview:Header :path="file.path" title="Contact" :subtitle="profile.name" icon="mail" />
+
+<ul class="preview__grid">
+  <li class="preview__card">
+    <span class="preview__card-icon">{{ ux_icon('mail', {class: 'icon'}) }}</span>
+    <span class="preview__label">E-mail</span>
+    <a href="mailto:{{ profile.email }}">{{ profile.email }}</a>
+  </li>
+  {% if profile.linkedinUrl %}
+    <li class="preview__card">
+      <span class="preview__card-icon">{{ ux_icon('user', {class: 'icon'}) }}</span>
+      <span class="preview__label">LinkedIn</span>
+      <twig:Preview:ExternalLink :url="profile.linkedinUrl" :label="profile.linkedinUrl|replace({'https://': ''})" />
+    </li>
+  {% endif %}
+  {% if profile.githubUrl %}
+    <li class="preview__card">
+      <span class="preview__card-icon">{{ ux_icon('branch', {class: 'icon'}) }}</span>
+      <span class="preview__label">GitHub</span>
+      <twig:Preview:ExternalLink :url="profile.githubUrl" :label="profile.githubUrl|replace({'https://': ''})" />
+    </li>
+  {% endif %}
+</ul>

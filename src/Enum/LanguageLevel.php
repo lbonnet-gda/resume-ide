@@ -25,6 +25,21 @@ enum LanguageLevel: string
         };
     }
 
+    /**
+     * @return int<1, 6> position on the six CEFR levels, where a native speaker ranks with C2
+     */
+    public function rank(): int
+    {
+        return match ($this) {
+            self::A1 => 1,
+            self::A2 => 2,
+            self::B1 => 3,
+            self::B2 => 4,
+            self::C1 => 5,
+            self::C2, self::Native => 6,
+        };
+    }
+
     public function frenchLabel(): string
     {
         return match ($this) {
