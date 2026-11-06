@@ -34,6 +34,10 @@ jobs:
                 if: ${{ !cancelled() && steps.install.conclusion == 'success' }}
                 run: docker compose run --rm -T php composer validate --strict --no-check-publish
 
+            -   name: Audit dependencies
+                if: ${{ !cancelled() && steps.install.conclusion == 'success' }}
+                run: docker compose run --rm -T php composer audit --locked
+
             -   name: Check code style
                 if: ${{ !cancelled() && steps.install.conclusion == 'success' }}
                 run: docker compose run --rm -T php composer cs-check
