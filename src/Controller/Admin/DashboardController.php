@@ -51,6 +51,7 @@ final class DashboardController extends AbstractDashboardController
         yield MenuItem::linkTo(ProjectCrudController::class, 'Projects', 'fa fa-diagram-project');
         yield MenuItem::linkTo(LanguageCrudController::class, 'Languages', 'fa fa-language');
         yield MenuItem::linkTo(InterestCrudController::class, 'Interests', 'fa fa-heart');
+        yield MenuItem::linkToUrl('Download PDF with phone', 'fa fa-file-pdf', $this->generateUrl('admin_resume_pdf'));
         yield MenuItem::linkToUrl('Back to website', 'fa fa-arrow-left', '/');
     }
 

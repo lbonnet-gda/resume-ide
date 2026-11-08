@@ -12,12 +12,14 @@
         "doctrine/doctrine-migrations-bundle": "^4.0",
         "doctrine/orm": "^3.7",
         "easycorp/easyadmin-bundle": "^5.8",
+        "sensiolabs/gotenberg-bundle": "^1.4",
         "symfony/asset": "8.1.*",
         "symfony/asset-mapper": "8.1.*",
         "symfony/console": "8.1.*",
         "symfony/dotenv": "8.1.*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "8.1.*",
+        "symfony/http-client": "8.1.*",
         "symfony/rate-limiter": "8.1.*",
         "symfony/runtime": "8.1.*",
         "symfony/security-bundle": "8.1.*",
@@ -29,7 +31,8 @@
         "symfony/ux-turbo": "^3.7",
         "symfony/ux-twig-component": "^3.7",
         "symfony/validator": "8.1.*",
-        "symfony/yaml": "8.1.*"
+        "symfony/yaml": "8.1.*",
+        "twig/intl-extra": "^3.30"
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^4.3",
