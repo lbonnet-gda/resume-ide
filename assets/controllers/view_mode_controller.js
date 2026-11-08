@@ -7,7 +7,10 @@ export default class extends Controller {
     static targets = ['button', 'fileView'];
     static values = { mode: String, inUrl: Boolean };
 
+    // Rendered right away too: the observer only calls back after the next layout, when the focus may already be in
+    // the pane that this hides.
     connect() {
+        this.render();
         this.resizeObserver = new ResizeObserver(() => this.render());
         this.resizeObserver.observe(this.element);
     }

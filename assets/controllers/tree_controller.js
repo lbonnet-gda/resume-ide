@@ -62,7 +62,7 @@ export default class extends Controller {
             return;
         }
 
-        const rows = [...this.treeTarget.querySelectorAll('.tree__row')].filter((row) => row.checkVisibility());
+        const rows = [...this.treeTarget.querySelectorAll('.tree__row')].filter((row) => row.getClientRects().length > 0);
         const row = event.target.closest('.tree__row');
         const index = rows.indexOf(row);
         const isFolder = row.matches('summary');
