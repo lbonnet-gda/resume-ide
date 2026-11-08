@@ -1,4 +1,4 @@
-<div{{ attributes.defaults({class: 'terminal__body', tabindex: '0', role: 'group', 'aria-label': 'Terminal session', 'data-terminal-target': 'session'}) }}>
+<div{{ attributes.defaults({class: 'terminal__body', tabindex: '0', role: 'group', 'aria-label': 'Terminal session', 'data-terminal-target': 'session', 'data-controller': 'keep-scroll', 'data-action': 'turbo:before-render@document->keep-scroll#save turbo:render@document->keep-scroll#restore'}) }}>
   <div class="terminal__log" role="log" aria-label="Terminal output">
     {% for entry in entries %}
       <p><span class="terminal__prompt">{{ entry.prompt }}</span>{{ entry.line }}</p>
