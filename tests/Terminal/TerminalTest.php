@@ -149,7 +149,12 @@ final class TerminalTest extends TestCase
      */
     public static function completions(): iterable
     {
-        yield 'command name is not a path' => ['  co', '', []];
+        yield 'single command name' => ['  he', '', ['help']];
+        yield 'command names sorted' => ['c', '', ['cat', 'cd', 'clear']];
+        yield 'unknown command name' => ['co', '', []];
+        yield 'download target' => ['download ', '', ['cv']];
+        yield 'unknown download target' => ['download x', '', []];
+        yield 'download takes a single target' => ['download cv ', '', []];
         yield 'empty word lists the current folder' => ['ls ', 'src', ['Education/', 'Experience/']];
         yield 'folders get a slash, sorted like the tree' => ['cat c', '', ['config/', 'composer.json']];
         yield 'keeps the typed path' => ['cat ../src/Experience/A', 'config', ['../src/Experience/AcmeCorp.php']];

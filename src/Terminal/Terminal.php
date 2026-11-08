@@ -89,6 +89,21 @@ final readonly class Terminal
      */
     public function complete(string $input, string $cwd): array
     {
+        $words = preg_split('/\s+/', ltrim($input)) ?: [''];
+
+        if (count($words) === 1) {
+            $commands = array_keys(self::MAX_ARGUMENTS);
+            sort($commands);
+
+            return array_values(
+                array_filter($commands, static fn (string $command): bool => str_starts_with($command, $words[0])),
+            );
+        }
+
+        if ($words[0] === 'download') {
+            return count($words) === 2 && str_starts_with('cv', $words[1]) ? ['cv'] : [];
+        }
+
         if (preg_match('#\s(\S*/)?([^\s/]*)$#', ltrim($input), $matches) !== 1) {
             return [];
         }
