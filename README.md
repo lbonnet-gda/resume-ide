@@ -115,9 +115,17 @@ docker compose exec php composer test       # PHPUnit
 
 The tests use their own database, `var/data_test.db`, which they migrate when they start.
 
-The CI runs these checks, plus YAML, Twig and service container lints and a check of the database schema and
-fixtures, on every pull request and on `main`. The `main` branch is protected: changes go through a pull request with a
-passing CI.
+PHP-CS-Fixer covers the PHP files; the other files must follow `.editorconfig` (the exclusions are in
+`.editorconfig-checker.json`). Check them with
+[editorconfig-checker](https://github.com/editorconfig-checker/editorconfig-checker), without the stack:
+
+```bash
+docker run --rm -u "$(id -u):$(id -g)" -v "$PWD:/check" ghcr.io/editorconfig-checker/editorconfig-checker:4.0.2
+```
+
+The CI runs these checks, plus YAML, Twig and service container lints, the `.editorconfig` check and a check of the
+database schema and fixtures, on every pull request and on `main`. The `main` branch is protected: changes go through
+a pull request with a passing CI.
 
 ## How it is built
 

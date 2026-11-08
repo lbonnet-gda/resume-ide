@@ -54,6 +54,12 @@ jobs:
                 if: ${{ !cancelled() && steps.install.conclusion == 'success' }}
                 run: docker compose run --rm -T php bin/console lint:twig templates
 
+            -   name: Check files against .editorconfig
+                if: ${{ !cancelled() }}
+                run: >-
+                    docker run --rm -u "$(id -u):$(id -g)" -v "$PWD:/check"
+                    ghcr.io/editorconfig-checker/editorconfig-checker:4.0.2
+
             -   name: Lint the service container
                 if: ${{ !cancelled() && steps.install.conclusion == 'success' }}
                 run: docker compose run --rm -T php bin/console lint:container
