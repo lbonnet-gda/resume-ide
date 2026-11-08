@@ -128,7 +128,9 @@ Fake shell with a fixed set of commands. Unknown commands print `command not fou
 - **No tracking**, no third-party cookies, so no consent banner. The only cookie is the admin session.
 - **Accessibility**: semantic HTML, full keyboard navigation (tree, tabs, terminal), visible focus,
   `prefers-reduced-motion` respected.
-- **SEO**: server-rendered pages, one title/description per file, Open Graph tags for link previews (LinkedIn).
+- **SEO**: server-rendered pages, a canonical URL per file, and Open Graph tags for link previews (LinkedIn), without
+  an image for now. The browser tab keeps the file name (`AcmeCorp.php – Jane Doe`); `og:title` and the description
+  are generated from the data (no admin field). Pages are in French (`lang="fr"`) like the content.
 - **Indexing**: `noindex` by default through an `X-Robots-Tag` header (it covers the PDF too), switchable with an
   environment variable. `robots.txt` must not block the site, or crawlers would never see the header and link previews
   could break.
@@ -213,6 +215,7 @@ Versions are checked when the project is initialized.
 - **Labels**: `feature`, `bug`, `design`, `tech`, `docs`, `accessibility`.
 - One issue per feature, written by the project manager with acceptance criteria.
 - Branches `feature/<issue>-<slug>` or `bugfix/<issue>-<slug>`, one PR per issue, `Closes #N` in the PR.
+  The PR takes the issue's label, and its title follows Conventional Commits, like the commits.
 - Conventional Commits, atomic commits, merged with a merge commit (atomic history preserved).
 - Every PR is reviewed and merged by the owner. CI must pass.
 
@@ -250,7 +253,8 @@ Per feature: issue → mockup if UI → client validation → implementation →
 **M2 — Release**
 
 - Hosting choice, deployment, domain, HTTPS.
-- `trusted_proxies` if the site runs behind a reverse proxy: the login's same-origin check and throttling depend on it.
+- `trusted_proxies` if the site runs behind a reverse proxy, and `trusted_hosts`: the login's same-origin check and
+  throttling depend on them, and so do the absolute URLs (canonical, `og:url`).
 - A real `APP_SECRET`: Live Component signs the terminal's state with it, and every page fails without it.
 - Legal notice, as required for a website in France (exact content to be checked).
 - Real data entered through the admin.

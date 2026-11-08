@@ -1,9 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ file ? file.name : 'File not found' }} – resume-ide{% endblock %}
+{% block title %}{{ file ? file.name ~ ' – ' ~ profileName : 'File not found – resume-ide' }}{% endblock %}
+
+{% block meta %}
+  {% if file %}
+    {% set canonicalUrl = url('app_file', {path: file.path}) %}
+    <link rel="canonical" href="{{ canonicalUrl }}">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:site_name" content="{{ profileName }}">
+    <meta property="og:url" content="{{ canonicalUrl }}">
+    <meta property="og:title" content="{{ file.title }}">
+    {% if file.description %}
+      <meta name="description" content="{{ file.description }}">
+      <meta property="og:description" content="{{ file.description }}">
+    {% endif %}
+  {% endif %}
+{% endblock %}
 
 {% block body %}
   <div class="ide" id="ide" data-controller="ide" data-action="keydown.esc@document->ide#closeOnEscape click@document->ide#closeBranchSelectorOnOutsideClick turbo:before-cache@document->ide#closeDrawer">
+    <a class="button button--primary skip-link" href="#editor-area" data-ide-target="inertWithDrawer">Skip to the editor</a>
+
     <twig:TopBar />
 
     <div class="workspace" data-ide-target="workspace">

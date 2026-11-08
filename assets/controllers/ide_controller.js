@@ -3,6 +3,10 @@ import { load, save } from '../session_state.js';
 
 const mobile = window.matchMedia('(max-width: 767.98px)');
 
+function focusOpenedFile() {
+    [...document.querySelectorAll('.file-view > .scrollable')].find((pane) => pane.getClientRects().length > 0)?.focus();
+}
+
 export default class extends Controller {
     static targets = [
         'backdrop',
@@ -83,8 +87,21 @@ export default class extends Controller {
     }
 
     closeDrawer() {
+        if (this.hideDrawer()) {
+            this.drawerToggleTarget.focus();
+        }
+    }
+
+    // The new page replaces the drawer toggle: the focus goes to the opened file instead.
+    closeDrawerAfterFileChoice() {
+        if (this.hideDrawer()) {
+            document.addEventListener('turbo:load', focusOpenedFile, { once: true });
+        }
+    }
+
+    hideDrawer() {
         if (!this.toolWindowTarget.classList.contains('is-open')) {
-            return;
+            return false;
         }
 
         this.toolWindowTarget.classList.remove('is-open');
@@ -93,13 +110,8 @@ export default class extends Controller {
         this.inertWithDrawerTargets.forEach((element) => {
             element.inert = false;
         });
-        this.drawerToggleTarget.focus();
-    }
 
-    closeDrawerAfterFileChoice(event) {
-        if (event.target.closest('a.tree__row')) {
-            this.closeDrawer();
-        }
+        return true;
     }
 
     closeOnEscape() {

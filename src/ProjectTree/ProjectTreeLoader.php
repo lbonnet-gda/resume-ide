@@ -19,9 +19,14 @@ final readonly class ProjectTreeLoader
     ) {
     }
 
+    public function profile(): ?Profile
+    {
+        return $this->entityManager->getRepository(Profile::class)->findOneBy([], ['id' => 'ASC']);
+    }
+
     public function load(): ?Folder
     {
-        $profile = $this->entityManager->getRepository(Profile::class)->findOneBy([], ['id' => 'ASC']);
+        $profile = $this->profile();
 
         if ($profile === null) {
             return null;
