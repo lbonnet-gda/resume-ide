@@ -10,8 +10,11 @@ use App\Entity\Profile;
 use App\Entity\Project;
 use App\Entity\Skill;
 use DateTimeImmutable;
+use Symfony\Component\String\TruncateMode;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
+
+use function Symfony\Component\String\u;
 
 final class FileContents
 {
@@ -273,6 +276,17 @@ final class FileContents
     public static function paragraphs(string $text): array
     {
         return preg_split('/\R\s*\R/', trim($text)) ?: [];
+    }
+
+    public static function description(string $text): string
+    {
+        $text = u($text)->collapseWhitespace();
+
+        if ($text->length() <= 160) {
+            return $text->toString();
+        }
+
+        return $text->truncate(159, cut: TruncateMode::WordBefore)->trimEnd(' ,;:·–')->append('…')->toString();
     }
 
     private static function monthYear(DateTimeImmutable $date): string

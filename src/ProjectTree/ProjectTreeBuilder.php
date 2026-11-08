@@ -36,9 +36,10 @@ final class ProjectTreeBuilder
         $experienceTimeline = $this->experienceTimeline($experiences);
         $educationTimeline = $this->educationTimeline($educations);
         $projectLinks = $this->projectLinks($projects);
-        $experienceFiles = $this->experienceFiles($experiences, $experienceTimeline);
-        $educationFiles = $this->educationFiles($educations, $educationTimeline);
-        $projectFiles = $this->projectFiles($projects, $projectLinks);
+        $name = $profile->getName();
+        $experienceFiles = $this->experienceFiles($experiences, $experienceTimeline, $name);
+        $educationFiles = $this->educationFiles($educations, $educationTimeline, $name);
+        $projectFiles = $this->projectFiles($projects, $projectLinks, $name);
         $readme = FileContents::readme(
             $profile,
             $experiences,
@@ -54,12 +55,31 @@ final class ProjectTreeBuilder
             $skillsByCategory[$skill->getCategory()][] = $skill;
         }
 
+        $languageList = array_map(
+            static fn (Language $language): string => $language->getName().' : '.$language->getLevel()->frenchLabel(),
+            $languages,
+        );
+        $interestList = array_map(
+            static fn (Interest $interest): string => implode(
+                ' : ',
+                array_filter([$interest->getName(), $interest->getDescription()]),
+            ),
+            $interests,
+        );
+        $contactChannels = array_filter([
+            'e-mail',
+            $profile->getLinkedinUrl() !== null ? 'LinkedIn' : null,
+            $profile->getGithubUrl() !== null ? 'GitHub' : null,
+        ]);
+
         return new Folder('', [
             new Folder('config', [
                 new File(
                     'config/interests.yaml',
                     FileContents::interests($interests),
                     'interests',
+                    "Centres d'intérêt – $name",
+                    FileContents::description(implode(' · ', $interestList)),
                     ['interests' => $interests],
                     breadcrumb: ['interests'],
                 ),
@@ -67,6 +87,8 @@ final class ProjectTreeBuilder
                     'config/languages.yaml',
                     FileContents::languages($languages),
                     'languages',
+                    "Langues – $name",
+                    FileContents::description(implode(' · ', $languageList)),
                     ['languages' => $languages],
                     breadcrumb: ['languages'],
                 ),
@@ -76,11 +98,26 @@ final class ProjectTreeBuilder
                 new Folder('src/Education', $educationFiles),
                 new Folder('src/Experience', $experienceFiles),
             ]),
-            new File('.env', FileContents::env($profile), 'contact', ['profile' => $profile]),
+            new File(
+                '.env',
+                FileContents::env($profile),
+                'contact',
+                "Contact – $name",
+                FileContents::description(
+                    "Contacter $name, {$profile->getTitle()} ({$profile->getLocation()}) : "
+                    .implode(', ', $contactChannels).'.',
+                ),
+                ['profile' => $profile],
+            ),
             new File(
                 'composer.json',
                 FileContents::composerJson($profile, $skills),
                 'skills',
+                "Compétences – $name",
+                FileContents::description(
+                    "Compétences de $name, {$profile->getTitle()} : "
+                    .implode(', ', array_map(static fn (Skill $skill): string => $skill->getName(), $skills)).'.',
+                ),
                 ['skillsByCategory' => $skillsByCategory],
                 breadcrumb: ['require'],
             ),
@@ -88,6 +125,8 @@ final class ProjectTreeBuilder
                 'README.md',
                 $readme,
                 'readme',
+                "$name – {$profile->getTitle()}",
+                FileContents::description($profile->getSummary()),
                 [
                     'profile' => $profile,
                     'summary' => FileContents::paragraphs($profile->getSummary()),
@@ -95,7 +134,7 @@ final class ProjectTreeBuilder
                     'educationTimeline' => $educationTimeline,
                     'projectLinks' => $projectLinks,
                 ],
-                breadcrumb: [$profile->getName()],
+                breadcrumb: [$name],
             ),
         ]);
     }
@@ -139,19 +178,29 @@ final class ProjectTreeBuilder
      *
      * @return list<File>
      */
-    private function experienceFiles(array $experiences, array $timeline): array
+    private function experienceFiles(array $experiences, array $timeline, string $name): array
     {
         return array_map(
-            static function (Experience $experience, array $item) use ($timeline): File {
+            static function (Experience $experience, array $item) use ($timeline, $name): File {
                 $className = basename($item['path'], '.php');
+                $dates = FileContents::monthRange($experience->getStartDate(), $experience->getEndDate());
+                $role = "{$experience->getRole()} chez {$experience->getCompany()}";
+                $missions = array_map(
+                    static fn (string $mission): string => rtrim($mission, '.').'.',
+                    $experience->getMissions(),
+                );
 
                 return new File(
                     $item['path'],
                     FileContents::experience($className, $experience),
                     'experience',
+                    "$role – $name",
+                    FileContents::description(
+                        "$role, $dates, {$experience->getLocation()}. ".implode(' ', $missions),
+                    ),
                     [
                         'experience' => $experience,
-                        'dates' => FileContents::monthRange($experience->getStartDate(), $experience->getEndDate()),
+                        'dates' => $dates,
                         'timeline' => $timeline,
                     ],
                     FileContents::yearRange($experience->getStartDate(), $experience->getEndDate(), 'now'),
@@ -199,19 +248,25 @@ final class ProjectTreeBuilder
      *
      * @return list<File>
      */
-    private function educationFiles(array $educations, array $timeline): array
+    private function educationFiles(array $educations, array $timeline, string $name): array
     {
         return array_map(
-            static function (Education $education, array $item) use ($timeline): File {
+            static function (Education $education, array $item) use ($timeline, $name): File {
                 $className = basename($item['path'], '.php');
+                $dates = FileContents::monthRange($education->getStartDate(), $education->getEndDate());
+                $degree = "{$education->getDegree()}, {$education->getSchool()}";
 
                 return new File(
                     $item['path'],
                     FileContents::education($className, $education),
                     'education',
+                    "$degree – $name",
+                    FileContents::description(
+                        "$degree, $dates, {$education->getLocation()}. {$education->getDescription()}",
+                    ),
                     [
                         'education' => $education,
-                        'dates' => FileContents::monthRange($education->getStartDate(), $education->getEndDate()),
+                        'dates' => $dates,
                         'timeline' => $timeline,
                     ],
                     FileContents::yearRange($education->getStartDate(), $education->getEndDate(), 'now'),
@@ -255,13 +310,15 @@ final class ProjectTreeBuilder
      *
      * @return list<File>
      */
-    private function projectFiles(array $projects, array $links): array
+    private function projectFiles(array $projects, array $links, string $name): array
     {
         return array_map(
             static fn (Project $project, array $link): File => new File(
                 $link['path'],
                 FileContents::project($project),
                 'project',
+                "Projet {$project->getName()} – $name",
+                FileContents::description($project->getDescription()),
                 [
                     'project' => $project,
                     'description' => FileContents::paragraphs($project->getDescription()),

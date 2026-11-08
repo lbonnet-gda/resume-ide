@@ -5,6 +5,7 @@ namespace App\Tests\Controller;
 use App\DataFixtures\AppFixtures;
 use App\Entity\Education;
 use App\Entity\Experience;
+use App\Entity\Interest;
 use DateTimeImmutable;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManagerInterface;
@@ -31,7 +32,6 @@ final class FileControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', '/src/Experience/AcmeCorp.php');
 
         self::assertResponseIsSuccessful();
-        self::assertPageTitleContains('AcmeCorp.php');
         self::assertSelectorTextContains('.editor__code', 'final class AcmeCorp');
         self::assertSame(
             ['resume-ide', 'src', 'Experience', 'AcmeCorp.php'],
@@ -50,7 +50,6 @@ final class FileControllerTest extends WebTestCase
         $this->client->request('GET', '/');
 
         self::assertResponseIsSuccessful();
-        self::assertPageTitleContains('README.md');
         self::assertSelectorTextContains('.editor__code', '# Jane Doe');
         self::assertSelectorTextContains('.tree a[href="/"][aria-current="page"]', 'README.md');
     }
@@ -135,6 +134,69 @@ final class FileControllerTest extends WebTestCase
             self::assertSelectorExists(".view-modes__button[data-mode=\"$mode\"][aria-current=\"true\"]", $url);
             self::assertSelectorCount(1, '.view-modes__button[aria-current]', $url);
         }
+    }
+
+    public function testEachFileHasItsOwnTitleDescriptionAndCanonicalUrl(): void
+    {
+        new AppFixtures()->load($this->entityManager);
+
+        $crawler = $this->client->request('GET', '/?view=code');
+
+        self::assertPageTitleSame('README.md – Jane Doe');
+        self::assertSame(
+            'Jane Doe – Développeuse PHP / Symfony senior',
+            $crawler->filter('meta[property="og:title"]')->attr('content'),
+        );
+        self::assertSame('Jane Doe', $crawler->filter('meta[property="og:site_name"]')->attr('content'));
+        self::assertSame('http://localhost/', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        self::assertSame(
+            'Développeuse back-end depuis dix ans, je conçois des applications Symfony robustes et lisibles. '
+            ."J'aime les bases de code propres, les tests qui ont du sens et…",
+            $crawler->filter('meta[name="description"]')->attr('content'),
+        );
+
+        $crawler = $this->client->request('GET', '/src/Experience/AcmeCorp.php?view=preview');
+        $description = (string) $crawler->filter('meta[name="description"]')->attr('content');
+
+        self::assertPageTitleSame('AcmeCorp.php – Jane Doe');
+        self::assertStringStartsWith(
+            "Lead développeuse Symfony chez Acme Corp, septembre 2021 – aujourd'hui, Lyon (hybride). Migration",
+            $description,
+        );
+        self::assertLessThanOrEqual(160, mb_strlen($description));
+        self::assertSame(
+            'http://localhost/src/Experience/AcmeCorp.php',
+            $crawler->filter('link[rel="canonical"]')->attr('href'),
+        );
+        self::assertSame(
+            'http://localhost/src/Experience/AcmeCorp.php',
+            $crawler->filter('meta[property="og:url"]')->attr('content'),
+        );
+        self::assertSame(
+            'Lead développeuse Symfony chez Acme Corp – Jane Doe',
+            $crawler->filter('meta[property="og:title"]')->attr('content'),
+        );
+        self::assertSame($description, $crawler->filter('meta[property="og:description"]')->attr('content'));
+
+        $crawler = $this->client->request('GET', '/config/languages.yaml');
+
+        self::assertSame('Langues – Jane Doe', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        self::assertSame(
+            'Français : Langue maternelle · Anglais : Courant (C1) · Espagnol : Intermédiaire (B1)',
+            $crawler->filter('meta[name="description"]')->attr('content'),
+        );
+    }
+
+    public function testEmptyDescriptionIsLeftOut(): void
+    {
+        new AppFixtures()->load($this->entityManager);
+        $this->entityManager->createQuery('DELETE FROM '.Interest::class)->execute();
+
+        $this->client->request('GET', '/config/interests.yaml');
+
+        self::assertResponseIsSuccessful();
+        self::assertSelectorNotExists('meta[name="description"]');
+        self::assertSelectorNotExists('meta[property="og:description"]');
     }
 
     public function testLinksFromThePreviewKeepItWhenItIsTheOnlyPane(): void

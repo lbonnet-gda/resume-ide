@@ -41,6 +41,7 @@ final class FileController extends AbstractController
             'file.html.twig',
             [
                 'root' => $root,
+                'profileName' => $loader->profile()?->getName(),
                 'file' => $file,
                 'requestedPath' => $path,
                 'viewMode' => $urlViewMode ?? ($path === 'README.md' ? ViewMode::Preview : ViewMode::Code),

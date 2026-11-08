@@ -31,7 +31,7 @@
     {% if file %}
       {# Without JavaScript, a link followed from the Preview carries the mode, which keeps the Preview. #}
       {% set linkParameters = viewMode == ViewMode.Preview ? {view: viewMode.value} : {} %}
-      <section class="preview scrollable" tabindex="0" lang="fr" aria-label="{{ file.name }}, preview" data-action="click->view-mode#followPreviewLink">
+      <section class="preview scrollable" tabindex="0" aria-label="{{ file.name }}, preview" data-action="click->view-mode#followPreviewLink">
         <div class="preview__content" data-preview="{{ file.preview }}">
           {{ include('preview/' ~ file.preview ~ '.html.twig', file.previewData) }}
         </div>
