@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Enum\ViewMode;
 use App\ProjectTree\File;
 use App\ProjectTree\ProjectTreeLoader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -34,8 +35,7 @@ final class FileController extends AbstractController
         $node = $root->find($path);
         // find() resolves paths like a shell, but only the exact path of a file is a page.
         $file = $node instanceof File && $node->path === $path ? $node : null;
-        $view = $request->query->getString('view');
-        $viewModeInUrl = in_array($view, ['code', 'split', 'preview'], true);
+        $urlViewMode = ViewMode::tryFrom($request->query->getString('view'));
 
         return $this->render(
             'file.html.twig',
@@ -43,8 +43,8 @@ final class FileController extends AbstractController
                 'root' => $root,
                 'file' => $file,
                 'requestedPath' => $path,
-                'viewMode' => $viewModeInUrl ? $view : ($path === 'README.md' ? 'preview' : 'code'),
-                'viewModeInUrl' => $viewModeInUrl,
+                'viewMode' => $urlViewMode ?? ($path === 'README.md' ? ViewMode::Preview : ViewMode::Code),
+                'viewModeInUrl' => $urlViewMode !== null,
             ],
             new Response(status: $file === null ? Response::HTTP_NOT_FOUND : Response::HTTP_OK),
         );

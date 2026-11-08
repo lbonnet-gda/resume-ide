@@ -1,6 +1,8 @@
 {% props file, requestedPath, viewMode, viewModeInUrl %}
 
-<main class="editor-area" id="editor-area" data-ide-target="inertWithDrawer"{% if file %} data-file-url="{{ path('app_file', {path: file.path}) }}" data-file-name="{{ file.name }}" data-controller="view-mode" data-view-mode-mode-value="{{ viewMode }}"{% if viewModeInUrl %} data-view-mode-in-url-value="true"{% endif %}{% endif %}>
+{% set ViewMode = enum('App\\Enum\\ViewMode') %}
+
+<main class="editor-area" id="editor-area" data-ide-target="inertWithDrawer"{% if file %} data-file-url="{{ path('app_file', {path: file.path}) }}" data-file-name="{{ file.name }}" data-controller="view-mode" data-view-mode-mode-value="{{ viewMode.value }}"{% if viewModeInUrl %} data-view-mode-in-url-value="true"{% endif %}{% endif %}>
   <div class="editor-tabs">
     <twig:Tabs :file="file" />
     {% if file %}
@@ -8,7 +10,7 @@
     {% endif %}
   </div>
 
-  <div class="file-view" data-mode="{{ file ? viewMode : 'code' }}" data-view-mode-target="fileView">
+  <div class="file-view" data-mode="{{ (file ? viewMode : ViewMode.Code).value }}" data-view-mode-target="fileView">
     <section class="editor scrollable" id="editor" tabindex="0" aria-label="{{ file ? file.name ~ ', source code' : 'Editor, file not found' }}" data-controller="source-links" data-action="mousedown->source-links#allowSelection click->source-links#ignoreClickEndingSelection">
       {% if file %}
         <h1 class="visually-hidden">{{ file.name }}</h1>
@@ -28,7 +30,7 @@
 
     {% if file %}
       {# Without JavaScript, a link followed from the Preview carries the mode, which keeps the Preview. #}
-      {% set linkParameters = viewMode == 'preview' ? {view: 'preview'} : {} %}
+      {% set linkParameters = viewMode == ViewMode.Preview ? {view: viewMode.value} : {} %}
       <section class="preview scrollable" tabindex="0" lang="fr" aria-label="{{ file.name }}, preview" data-action="click->view-mode#followPreviewLink">
         <div class="preview__content" data-preview="{{ file.preview }}">
           {{ include('preview/' ~ file.preview ~ '.html.twig', file.previewData) }}
