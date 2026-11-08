@@ -22,13 +22,19 @@ final class TerminalTest extends TestCase
 
     public function testHelpListsEveryCommand(): void
     {
-        $output = $this->terminal()->execute('help', '')->output;
+        $expected = <<<'TEXT'
+            Available commands:
+              help          List available commands
+              ls [path]     List a folder
+              cd <path>     Change the current folder
+              cat <file>    Print a file
+              open <file>   Open a file in the editor
+              whoami        Short presentation
+              download cv   Download the PDF resume
+              clear         Clear the terminal
+            TEXT;
 
-        $usages = ['help', 'ls [path]', 'cd <path>', 'cat <file>', 'open <file>', 'whoami', 'download cv', 'clear'];
-
-        foreach ($usages as $usage) {
-            self::assertStringContainsString($usage, $output);
-        }
+        self::assertSame($expected, $this->terminal()->execute('help', '')->output);
     }
 
     public function testUnknownCommandSuggestsHelp(): void
