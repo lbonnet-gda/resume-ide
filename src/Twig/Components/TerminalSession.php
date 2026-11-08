@@ -66,7 +66,11 @@ final class TerminalSession
             $this->dispatchBrowserEvent('terminal:open', ['url' => $url]);
         }
 
-        return $result->action === TerminalAction::Download ? LiveResponse::downloadUrl('/resume.pdf') : null;
+        if ($result->action === TerminalAction::Download) {
+            return LiveResponse::downloadUrl($this->urlGenerator->generate('app_resume_pdf'));
+        }
+
+        return null;
     }
 
     #[LiveAction]
