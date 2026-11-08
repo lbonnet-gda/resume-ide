@@ -1,0 +1,17 @@
+{% props items, linkParameters, currentPath = null %}
+
+<ol class="preview__timeline">
+  {% for item in items %}
+    <li{% if item.path == currentPath %} aria-current="true"{% endif %}>
+      <span class="preview__timeline-dates">{{ item.dates }}</span>
+      <span class="preview__timeline-title">
+        {%- if item.path == currentPath -%}
+          {{ item.title }}
+        {%- else -%}
+          <a href="{{ path('app_file', {path: item.path}|merge(linkParameters)) }}">{{ item.title }}</a>
+        {%- endif -%}
+      </span>
+      <span class="preview__timeline-subtitle">{{ item.subtitle }}</span>
+    </li>
+  {% endfor %}
+</ol>

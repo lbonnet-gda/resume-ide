@@ -1,0 +1,7 @@
+{% props filled, total %}
+
+<span class="preview__dots" aria-hidden="true">
+  {% for position in 1..total %}
+    <span class="preview__dot{{ position <= filled ? ' is-filled' }}"></span>
+  {% endfor %}
+</span>

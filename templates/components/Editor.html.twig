@@ -1,26 +1,43 @@
-{% props file, requestedPath %}
+{% props file, requestedPath, viewMode, viewModeInUrl %}
 
-<main class="editor-area" id="editor-area" data-ide-target="inertWithDrawer"{% if file %} data-file-url="{{ path('app_file', {path: file.path}) }}" data-file-name="{{ file.name }}"{% endif %}>
+{% set ViewMode = enum('App\\Enum\\ViewMode') %}
+
+<main class="editor-area" id="editor-area" data-ide-target="inertWithDrawer"{% if file %} data-file-url="{{ path('app_file', {path: file.path}) }}" data-file-name="{{ file.name }}" data-controller="view-mode" data-view-mode-mode-value="{{ viewMode.value }}"{% if viewModeInUrl %} data-view-mode-in-url-value="true"{% endif %}{% endif %}>
   <div class="editor-tabs">
     <twig:Tabs :file="file" />
+    {% if file %}
+      <twig:ViewModes :file="file" :viewMode="viewMode" />
+    {% endif %}
   </div>
 
-  <section class="editor scrollable" id="editor" tabindex="0" aria-label="{{ file ? file.name ~ ', source code' : 'Editor, file not found' }}">
+  <div class="file-view" data-mode="{{ (file ? viewMode : ViewMode.Code).value }}" data-view-mode-target="fileView">
+    <section class="editor scrollable" id="editor" tabindex="0" aria-label="{{ file ? file.name ~ ', source code' : 'Editor, file not found' }}" data-controller="source-links" data-action="mousedown->source-links#allowSelection click->source-links#ignoreClickEndingSelection">
+      {% if file %}
+        <h1 class="visually-hidden">{{ file.name }}</h1>
+        <pre class="editor__gutter" aria-hidden="true">{{ range(1, file.content|split("\n")|length)|join("\n") }}</pre>
+        <pre class="editor__code"><code>{{ file.content|highlight(file.name) }}</code></pre>
+        <div class="editor__empty editor__closed">
+          <p>No files are open</p>
+          <p class="editor__empty-hint">Select a file in the Project tool window.</p>
+        </div>
+      {% else %}
+        <div class="editor__empty">
+          <h1>File not found</h1>
+          <p class="editor__empty-hint">There is no file at <kbd>{{ requestedPath }}</kbd>. <a href="{{ path('app_file') }}">Open README.md</a></p>
+        </div>
+      {% endif %}
+    </section>
+
     {% if file %}
-      <h1 class="visually-hidden">{{ file.name }}</h1>
-      <pre class="editor__gutter" aria-hidden="true">{{ range(1, file.content|split("\n")|length)|join("\n") }}</pre>
-      <pre class="editor__code"><code>{{ file.content }}</code></pre>
-      <div class="editor__empty editor__closed">
-        <p>No files are open</p>
-        <p class="editor__empty-hint">Select a file in the Project tool window.</p>
-      </div>
-    {% else %}
-      <div class="editor__empty">
-        <h1>File not found</h1>
-        <p class="editor__empty-hint">There is no file at <kbd>{{ requestedPath }}</kbd>. <a href="{{ path('app_file') }}">Open README.md</a></p>
-      </div>
+      {# Without JavaScript, a link followed from the Preview carries the mode, which keeps the Preview. #}
+      {% set linkParameters = viewMode == ViewMode.Preview ? {view: viewMode.value} : {} %}
+      <section class="preview scrollable" tabindex="0" lang="fr" aria-label="{{ file.name }}, preview" data-action="click->view-mode#followPreviewLink">
+        <div class="preview__content" data-preview="{{ file.preview }}">
+          {{ include('preview/' ~ file.preview ~ '.html.twig', file.previewData) }}
+        </div>
+      </section>
     {% endif %}
-  </section>
+  </div>
 
   {% if file %}
     <twig:CodeBreadcrumb :segments="file.breadcrumb" />

@@ -1,0 +1,38 @@
+<twig:Preview:Header :path="file.path" :title="experience.role" :subtitle="experience.company" icon="briefcase">
+  <ul class="preview__meta">
+    <li>{{ ux_icon('calendar', {class: 'icon'}) }}<span>{{ dates }}</span></li>
+    <li>{{ ux_icon('pin', {class: 'icon'}) }}<span>{{ experience.location }}</span></li>
+    {% if experience.endDate is null %}
+      <li>{{ ux_icon('check', {class: 'icon'}) }}<span>En poste</span></li>
+    {% endif %}
+  </ul>
+</twig:Preview:Header>
+
+<div class="preview__columns">
+  <div>
+    {% if experience.missions %}
+      <section class="preview__section">
+        <h2>Missions</h2>
+        <ul class="preview__card preview__list">
+          {% for mission in experience.missions %}
+            <li>{{ mission }}</li>
+          {% endfor %}
+        </ul>
+      </section>
+    {% endif %}
+    {% if experience.stack %}
+      <section class="preview__section">
+        <h2>Technologies</h2>
+        <ul class="preview__tags">
+          {% for technology in experience.stack %}
+            <li>{{ technology }}</li>
+          {% endfor %}
+        </ul>
+      </section>
+    {% endif %}
+  </div>
+  <section class="preview__section">
+    <h2>Parcours</h2>
+    <twig:Preview:Timeline :items="timeline" :linkParameters="linkParameters" :currentPath="file.path" />
+  </section>
+</div>

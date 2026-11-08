@@ -113,6 +113,96 @@ final class FileControllerTest extends WebTestCase
         );
     }
 
+    public function testViewModeComesFromTheUrlWithThePreviewByDefaultForTheReadmeOnly(): void
+    {
+        new AppFixtures()->load($this->entityManager);
+
+        $expectedModes = [
+            '/' => 'preview',
+            '/composer.json' => 'code',
+            '/?view=code' => 'code',
+            '/composer.json?view=split' => 'split',
+            '/composer.json?view=preview' => 'preview',
+            '/composer.json?view=nope' => 'code',
+        ];
+
+        foreach ($expectedModes as $url => $mode) {
+            $this->client->request('GET', $url);
+
+            self::assertResponseIsSuccessful($url);
+            self::assertSelectorExists(".file-view[data-mode=\"$mode\"] > .editor .editor__code", $url);
+            self::assertSelectorExists(".file-view[data-mode=\"$mode\"] > .preview h1", $url);
+            self::assertSelectorExists(".view-modes__button[data-mode=\"$mode\"][aria-current=\"true\"]", $url);
+            self::assertSelectorCount(1, '.view-modes__button[aria-current]', $url);
+        }
+    }
+
+    public function testLinksFromThePreviewKeepItWhenItIsTheOnlyPane(): void
+    {
+        new AppFixtures()->load($this->entityManager);
+
+        $crawler = $this->client->request('GET', '/');
+
+        self::assertSame(
+            '/src/Experience/AcmeCorp.php?view=preview',
+            $crawler->filter('.preview__timeline a')->first()->attr('href'),
+        );
+
+        $crawler = $this->client->request('GET', '/?view=split');
+
+        self::assertSame('/src/Experience/AcmeCorp.php', $crawler->filter('.preview__timeline a')->first()->attr('href'));
+    }
+
+    public function testPreviewsShowTheResumeData(): void
+    {
+        new AppFixtures()->load($this->entityManager);
+
+        $crawler = $this->client->request('GET', '/src/Experience/AcmeCorp.php');
+
+        self::assertSelectorTextSame('.preview h1', 'Lead développeuse Symfony');
+        self::assertSelectorTextContains('.preview__meta', "septembre 2021 – aujourd'hui");
+        self::assertSelectorTextContains('.preview__meta', 'En poste');
+        self::assertSelectorTextSame('.preview__timeline [aria-current="true"] .preview__timeline-title', 'Acme Corp');
+        self::assertSelectorNotExists('.preview__timeline [aria-current="true"] a');
+        self::assertCount(4, $crawler->filter('.preview__timeline li'));
+
+        $crawler = $this->client->request('GET', '/config/languages.yaml');
+
+        self::assertSame(
+            ['Français' => 6, 'Anglais' => 5, 'Espagnol' => 3],
+            array_combine(
+                $crawler->filter('.preview__language strong')->each(static fn ($name): string => $name->text()),
+                $crawler->filter('.preview__language')->each(
+                    static fn ($card): int => $card->filter('.preview__dot.is-filled')->count(),
+                ),
+            ),
+        );
+
+        $crawler = $this->client->request('GET', '/projects/resume-ide.md');
+
+        self::assertSame(
+            ['recipe-box', 'trail-stats'],
+            $crawler->filter('.preview__section .preview__mono a')->each(static fn ($link): string => $link->text()),
+        );
+    }
+
+    public function testNoPageShowsThePhoneNumber(): void
+    {
+        new AppFixtures()->load($this->entityManager);
+
+        $crawler = $this->client->request('GET', '/');
+        $urls = $crawler->filter('.tree a[href^="/"]')->each(static fn ($link): string => (string) $link->attr('href'));
+
+        self::assertCount(14, $urls);
+
+        foreach ($urls as $url) {
+            $this->client->request('GET', $url.'?view=split');
+
+            self::assertResponseIsSuccessful($url);
+            self::assertStringNotContainsString('39 98', (string) $this->client->getResponse()->getContent(), $url);
+        }
+    }
+
     public function testEmptyDatabaseShowsASimplePage(): void
     {
         $this->client->request('GET', '/');

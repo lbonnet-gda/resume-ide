@@ -12,14 +12,14 @@ final class FolderTest extends TestCase
     public function testChildrenAreSortedFoldersFirstThenCaseInsensitive(): void
     {
         $root = new Folder('', [
-            new File('README.md', ''),
-            new File('composer.json', ''),
-            new File('.env', ''),
+            new File('README.md', '', 'readme'),
+            new File('composer.json', '', 'skills'),
+            new File('.env', '', 'contact'),
             new Folder('src', []),
-            new File('apple.md', ''),
+            new File('apple.md', '', 'project'),
             new Folder('Config', []),
-            new File('item10.md', ''),
-            new File('item2.md', ''),
+            new File('item10.md', '', 'project'),
+            new File('item2.md', '', 'project'),
         ]);
 
         self::assertSame(
@@ -51,10 +51,10 @@ final class FolderTest extends TestCase
     {
         $root = new Folder('', [
             new Folder('src', [
-                new Folder('src/Experience', [new File('src/Experience/AcmeCorp.php', '')]),
+                new Folder('src/Experience', [new File('src/Experience/AcmeCorp.php', '', 'experience')]),
             ]),
-            new File('.env', ''),
-            new File('README.md', ''),
+            new File('.env', '', 'contact'),
+            new File('README.md', '', 'readme'),
         ]);
 
         self::assertSame($expectedPath, $root->find($path)?->path);

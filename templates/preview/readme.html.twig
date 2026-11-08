@@ -1,0 +1,60 @@
+<twig:Preview:Header :path="file.path" :title="profile.name" :subtitle="profile.title" :initials="profile.name|split(' ')|map(word => word|first)|join">
+  <ul class="preview__meta">
+    <li>{{ ux_icon('pin', {class: 'icon'}) }}<span>{{ profile.location }}</span></li>
+    <li>{{ ux_icon('mail', {class: 'icon'}) }}<span><a href="mailto:{{ profile.email }}">{{ profile.email }}</a></span></li>
+    {% if profile.linkedinUrl %}
+      <li>{{ ux_icon('user', {class: 'icon'}) }}<span><twig:Preview:ExternalLink :url="profile.linkedinUrl" label="LinkedIn" /></span></li>
+    {% endif %}
+    {% if profile.githubUrl %}
+      <li>{{ ux_icon('branch', {class: 'icon'}) }}<span><twig:Preview:ExternalLink :url="profile.githubUrl" label="GitHub" /></span></li>
+    {% endif %}
+  </ul>
+</twig:Preview:Header>
+
+<div class="preview__lead">
+  {% for paragraph in summary %}
+    <p>{{ paragraph }}</p>
+  {% endfor %}
+</div>
+
+<div class="preview__columns">
+  <section class="preview__section">
+    <h2>Expériences</h2>
+    <twig:Preview:Timeline :items="experienceTimeline" :linkParameters="linkParameters" />
+  </section>
+  <div>
+    <section class="preview__section">
+      <h2>Formation</h2>
+      <twig:Preview:Timeline :items="educationTimeline" :linkParameters="linkParameters" />
+    </section>
+    {% if projectLinks %}
+      <section class="preview__section">
+        <h2>Projets</h2>
+        <div class="preview__grid">
+          {% for project in projectLinks %}
+            <a class="preview__link-card" href="{{ path('app_file', {path: project.path}|merge(linkParameters)) }}">
+              {{ ux_icon('box', {class: 'icon'}) }}
+              <span>{{ project.name }}</span>
+            </a>
+          {% endfor %}
+        </div>
+      </section>
+    {% endif %}
+  </div>
+</div>
+
+<section class="preview__section">
+  <h2>En savoir plus</h2>
+  <div class="preview__grid">
+    {% for path, card in {
+      'composer.json': {icon: 'sliders', label: 'Compétences'},
+      'config/languages.yaml': {icon: 'speech', label: 'Langues'},
+      'config/interests.yaml': {icon: 'heart', label: "Centres d'intérêt"},
+    } %}
+      <a class="preview__link-card" href="{{ path('app_file', {path: path}|merge(linkParameters)) }}">
+        {{ ux_icon(card.icon, {class: 'icon'}) }}
+        <span>{{ card.label }}</span>
+      </a>
+    {% endfor %}
+  </div>
+</section>

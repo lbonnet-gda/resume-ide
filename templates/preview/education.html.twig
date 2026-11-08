@@ -1,0 +1,26 @@
+<twig:Preview:Header :path="file.path" :title="education.degree" :subtitle="education.school" icon="education" />
+
+<ul class="preview__grid">
+  <li class="preview__card">
+    <span class="preview__card-icon">{{ ux_icon('calendar', {class: 'icon'}) }}</span>
+    <span class="preview__label">Période</span>
+    <span>{{ dates }}</span>
+  </li>
+  <li class="preview__card">
+    <span class="preview__card-icon">{{ ux_icon('pin', {class: 'icon'}) }}</span>
+    <span class="preview__label">Lieu</span>
+    <span>{{ education.location }}</span>
+  </li>
+  {% if education.description %}
+    <li class="preview__card">
+      <span class="preview__card-icon">{{ ux_icon('check', {class: 'icon'}) }}</span>
+      <span class="preview__label">Détails</span>
+      <span>{{ education.description }}</span>
+    </li>
+  {% endif %}
+</ul>
+
+<section class="preview__section">
+  <h2>Cursus</h2>
+  <twig:Preview:Timeline :items="timeline" :linkParameters="linkParameters" :currentPath="file.path" />
+</section>

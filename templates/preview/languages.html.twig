@@ -1,0 +1,11 @@
+<twig:Preview:Header :path="file.path" title="Langues" icon="speech" />
+
+<ul class="preview__grid">
+  {% for language in languages %}
+    <li class="preview__card preview__language">
+      <strong>{{ language.name }}</strong>
+      <span class="preview__card-text">{{ language.level.frenchLabel }}</span>
+      <twig:Preview:Dots :filled="language.level.rank" :total="6" />
+    </li>
+  {% endfor %}
+</ul>

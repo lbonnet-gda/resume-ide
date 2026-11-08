@@ -1,0 +1,18 @@
+<twig:Preview:Header :path="file.path" title="Compétences" subtitle="Niveau de 1 à 5" icon="sliders" />
+
+<div class="preview__grid preview__grid--wide">
+  {% for category, skills in skillsByCategory %}
+    <section class="preview__card">
+      <h2>{{ category }}</h2>
+      <ul class="preview__skills">
+        {% for skill in skills %}
+          <li>
+            <span>{{ skill.name }}</span>
+            <twig:Preview:Dots :filled="skill.level" :total="5" />
+            <span class="preview__level"><span class="visually-hidden">Niveau </span>{{ skill.level }}/5</span>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endfor %}
+</div>
