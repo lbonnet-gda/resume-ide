@@ -66,6 +66,7 @@
     --color-button-primary-hover: #3168d8;
     --color-button-primary-text: #ffffff;
     --color-terminal-prompt: #6aab73;
+    --color-terminal-error: #f2707d;
     --color-terminal-line-focus: #26282b;
     --color-terminal-prompt-focus: #8fd19a;
     --color-icon-folder: #a8adb5;
@@ -1375,9 +1376,20 @@ kbd {
     display: none;
 }
 
+.terminal__log p,
+.terminal__log pre {
+    margin: 0;
+    font: inherit;
+    white-space: pre-wrap;
+}
+
 .terminal__prompt {
     margin-right: 8px;
     color: var(--color-terminal-prompt);
+}
+
+.terminal__error {
+    color: var(--color-terminal-error);
 }
 
 .terminal__input-line {

@@ -1,0 +1,16 @@
+<div{{ attributes.defaults({class: 'terminal__body', tabindex: '0', role: 'group', 'aria-label': 'Terminal session', 'data-terminal-target': 'session'}) }}>
+  <div class="terminal__log" role="log" aria-label="Terminal output">
+    {% for entry in entries %}
+      <p><span class="terminal__prompt">{{ entry.prompt }}</span>{{ entry.line }}</p>
+      {% if entry.output is not empty %}
+        <pre{% if entry.isError %} class="terminal__error"{% endif %}>{{ entry.output }}</pre>
+      {% endif %}
+    {% endfor %}
+  </div>
+  <form class="terminal__input-line" autocomplete="off" data-action="terminal#run:prevent">
+    <label class="terminal__prompt" for="terminal-input">
+      <span class="visually-hidden">Command, in </span>{{ this.prompt }}
+    </label>
+    <input class="terminal__input" id="terminal-input" type="text" spellcheck="false" autocapitalize="off" data-terminal-target="input" data-ide-target="terminalInput" data-action="keydown.up->terminal#previous:prevent keydown.down->terminal#next:prevent keydown.tab->terminal#complete">
+  </form>
+</div>
