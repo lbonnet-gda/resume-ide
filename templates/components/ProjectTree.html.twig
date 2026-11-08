@@ -9,7 +9,7 @@
     </button>
   </div>
 
-  <nav class="tree scrollable" aria-label="Project files" data-tree-target="tree" data-action="keydown->tree#navigate toggle->tree#rememberFolders:capture mouseover->tree#showPopupOnHover mouseleave->tree#hidePopup focusin->tree#showPopupOnFocus focusout->tree#hidePopup click->tree#hidePopup scroll->tree#movePopup">
+  <nav class="tree scrollable" aria-label="Project files" data-controller="keep-scroll" data-tree-target="tree" data-action="turbo:before-render@document->keep-scroll#save turbo:render@document->keep-scroll#restore keydown->tree#navigate toggle->tree#rememberFolders:capture mouseover->tree#showPopupOnHover mouseleave->tree#hidePopup focusin->tree#showPopupOnFocus focusout->tree#hidePopup click->tree#hidePopup scroll->tree#movePopup">
     <ul class="tree__group">
       <twig:TreeNode :node="root" :depth="0" :currentPath="currentPath" />
     </ul>
