@@ -1,6 +1,8 @@
 # see https://symfony.com/doc/current/reference/configuration/framework.html
 framework:
     secret: '%env(APP_SECRET)%'
+    # Symfony's own noindex header only follows the debug mode: ROBOTS_NOINDEX controls it instead.
+    disallow_search_engine_index: false
 
     # Note that the session will be started ONLY if you read or write from it.
     session:

@@ -52,6 +52,7 @@ final class ResumePdfControllerTest extends WebTestCase
         self::assertResponseIsSuccessful();
         self::assertResponseHeaderSame('Content-Type', 'application/pdf');
         self::assertResponseHeaderSame('Content-Disposition', 'attachment; filename=CV-Jane-Doe.pdf');
+        self::assertResponseHeaderSame('X-Robots-Tag', 'noindex');
         self::assertSame(self::PDF, $this->client->getResponse()->getContent());
 
         self::assertCount(1, $this->gotenbergRequests);

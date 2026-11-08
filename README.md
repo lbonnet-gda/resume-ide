@@ -68,6 +68,9 @@ background. Stop it with `Ctrl+C` or `docker compose down`.
 - **`APP_SECRET`**: the versioned `.env` leaves it empty, and only the dev and test environments set one. Any other
   environment needs a long random value (e.g. from `openssl rand -hex 32`), set as a real environment variable: the
   terminal's Live Component signs its state with it, and every page fails with an empty secret.
+- **Search engines**: every page and PDF is sent with an `X-Robots-Tag: noindex` header, so the site stays out of
+  search results. Set `ROBOTS_NOINDEX=0` (in `.env.local` or as a real environment variable) to let it be indexed.
+  `public/robots.txt` allows every crawler on purpose: a crawler blocked there would never see the header.
 - **HTTPS certificate**: Caddy signs it with its own local certificate authority, so browsers warn about it. To trust
   it, copy the authority's root certificate out of the container, then import it in your OS or browser trust store (as a
   trusted root certificate authority):
