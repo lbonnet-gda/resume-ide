@@ -50,6 +50,7 @@ final class FileControllerTest extends WebTestCase
         $this->client->request('GET', '/');
 
         self::assertResponseIsSuccessful();
+        self::assertResponseHeaderSame('X-Robots-Tag', 'noindex');
         self::assertPageTitleContains('README.md');
         self::assertSelectorTextContains('.editor__code', '# Jane Doe');
         self::assertSelectorTextContains('.tree a[href="/"][aria-current="page"]', 'README.md');
