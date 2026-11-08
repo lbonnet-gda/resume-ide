@@ -4,6 +4,8 @@
 
 {% block body %}
   <div class="ide" id="ide" data-controller="ide" data-action="keydown.esc@document->ide#closeOnEscape click@document->ide#closeBranchSelectorOnOutsideClick turbo:before-cache@document->ide#closeDrawer">
+    <a class="button button--primary skip-link" href="#editor-area" data-ide-target="inertWithDrawer">Skip to the editor</a>
+
     <twig:TopBar />
 
     <div class="workspace" data-ide-target="workspace">

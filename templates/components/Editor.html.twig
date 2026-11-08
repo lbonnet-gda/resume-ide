@@ -2,7 +2,7 @@
 
 {% set ViewMode = enum('App\\Enum\\ViewMode') %}
 
-<main class="editor-area" id="editor-area" data-ide-target="inertWithDrawer"{% if file %} data-file-url="{{ path('app_file', {path: file.path}) }}" data-file-name="{{ file.name }}" data-controller="view-mode" data-view-mode-mode-value="{{ viewMode.value }}"{% if viewModeInUrl %} data-view-mode-in-url-value="true"{% endif %}{% endif %}>
+<main class="editor-area" id="editor-area" tabindex="-1" data-ide-target="inertWithDrawer"{% if file %} data-file-url="{{ path('app_file', {path: file.path}) }}" data-file-name="{{ file.name }}" data-controller="view-mode" data-view-mode-mode-value="{{ viewMode.value }}"{% if viewModeInUrl %} data-view-mode-in-url-value="true"{% endif %}{% endif %}>
   <div class="editor-tabs">
     <twig:Tabs :file="file" />
     {% if file %}

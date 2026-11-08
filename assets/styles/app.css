@@ -422,6 +422,17 @@ ol {
     outline-offset: 2px;
 }
 
+.skip-link {
+    position: absolute;
+    z-index: 50;
+    top: 6px;
+    left: 8px;
+}
+
+.skip-link:not(:focus) {
+    transform: translateY(-200%);
+}
+
 /* Tool window stripe */
 .tool-stripe {
     display: flex;
@@ -660,7 +671,7 @@ details[open] > .tree__row > .tree__chevron,
     align-items: center;
     gap: 6px;
     height: 100%;
-    padding: 0 30px 0 12px;
+    padding: 0 32px 0 12px;
     color: var(--color-text);
     text-decoration: none;
     white-space: nowrap;
@@ -676,11 +687,11 @@ details[open] > .tree__row > .tree__chevron,
 
 .tab__close {
     position: absolute;
-    right: 6px;
+    right: 4px;
     display: grid;
     place-items: center;
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     padding: 0;
     border: 0;
     border-radius: var(--radius);
