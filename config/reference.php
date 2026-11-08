@@ -1352,6 +1352,10 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     }>,
  *     role_hierarchy?: array<string, Param|string|list<scalar|Param|null>>,
  * }
+ * @psalm-type LiveComponentConfig = array{
+ *     secret?: scalar|Param|null, // The secret used to compute fingerprints and checksums // Default: "%kernel.secret%"
+ *     fetch_credentials?: "same-origin"|"include"|"omit"|Param, // The default fetch credentials mode for all Live Components ('same-origin', 'include', 'omit') // Default: "same-origin"
+ * }
  * @psalm-type SensiolabsGotenbergConfig = array{
  *     assets_directory?: list<scalar|Param|null>,
  *     version?: scalar|Param|null, // Version of Gotenberg // Default: null
@@ -2383,6 +2387,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     twig_component?: TwigComponentConfig,
  *     twig_extra?: TwigExtraConfig,
  *     security?: SecurityConfig,
+ *     live_component?: LiveComponentConfig,
  *     sensiolabs_gotenberg?: SensiolabsGotenbergConfig,
  *     "when@dev"?: array{
  *         imports?: ImportsConfig,
@@ -2398,6 +2403,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         twig_component?: TwigComponentConfig,
  *         twig_extra?: TwigExtraConfig,
  *         security?: SecurityConfig,
+ *         live_component?: LiveComponentConfig,
  *         sensiolabs_gotenberg?: SensiolabsGotenbergConfig,
  *     },
  *     "when@prod"?: array{
@@ -2414,6 +2420,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         twig_component?: TwigComponentConfig,
  *         twig_extra?: TwigExtraConfig,
  *         security?: SecurityConfig,
+ *         live_component?: LiveComponentConfig,
  *         sensiolabs_gotenberg?: SensiolabsGotenbergConfig,
  *     },
  *     "when@test"?: array{
@@ -2430,6 +2437,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         twig_component?: TwigComponentConfig,
  *         twig_extra?: TwigExtraConfig,
  *         security?: SecurityConfig,
+ *         live_component?: LiveComponentConfig,
  *         sensiolabs_gotenberg?: SensiolabsGotenbergConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias

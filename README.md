@@ -11,9 +11,9 @@ PDF version. The public repository is part of the deliverable: it is meant to sh
 ## Status
 
 Work in progress. The setup milestone (M0: Symfony skeleton, Docker, code style, static analysis, tests, CI) is done;
-the MVP milestone (M1) is under way. The IDE layout, the admin and the PDF work: file tree, tabs, raw source of each
-file at its own URL, on desktop and mobile, the résumé data edited at `/admin`, and the PDF résumé at `/resume.pdf`.
-Syntax highlighting, the file views and the terminal are still to come.
+the MVP milestone (M1) is under way. The IDE layout, the terminal, the admin and the PDF work: file tree, tabs, raw
+source of each file at its own URL, on desktop and mobile, every terminal command, the résumé data edited at
+`/admin`, and the PDF résumé at `/resume.pdf`. Syntax highlighting and the file views are still to come.
 
 Progress is tracked on the public [roadmap](https://github.com/users/lbonnet-gda/projects/1).
 
@@ -21,13 +21,13 @@ Progress is tracked on the public [roadmap](https://github.com/users/lbonnet-gda
 
 - PHP 8.4, Symfony 8.1, served by FrankenPHP in Docker Compose.
 - Doctrine ORM with SQLite: the database is a single git-ignored file, no database server.
-- Twig Components, Symfony UX Turbo and Stimulus, AssetMapper (no Node.js, no build step), native CSS, Symfony UX Icons.
+- Twig Components, a Live Component for the terminal, Symfony UX Turbo and Stimulus, AssetMapper (no Node.js, no build
+  step), native CSS, Symfony UX Icons.
 - Inter and JetBrains Mono, self-hosted in `assets/fonts/` under the SIL Open Font License. No request to a third party.
 - EasyAdmin for the admin.
 - PHP-CS-Fixer, PHPStan (level `max`) and PHPUnit, run by GitHub Actions.
 - PDF résumé rendered from a Twig template by [Gotenberg](https://gotenberg.dev) (Chromium), a container of the
   Compose stack. The tests mock it, so the CI doesn't need it.
-- Planned for M1: Live Component.
 
 Pages are server-rendered and usable without JavaScript. Each file of the fake project is generated from the database.
 Opened tabs and panel states stay in the browser's `sessionStorage`: public pages set no cookie, only the admin has a
@@ -65,6 +65,9 @@ background. Stop it with `Ctrl+C` or `docker compose down`.
   user has other IDs (`id -u`, `id -g`), run `env UID=$(id -u) GID=$(id -g) docker compose up --build` instead, each
   time you build. The `env` prefix matters: in Bash, `UID` is read-only, so `UID=$(id -u) docker compose …` would
   keep 1000 (Bash only prints a warning).
+- **`APP_SECRET`**: the versioned `.env` leaves it empty, and only the dev and test environments set one. Any other
+  environment needs a long random value (e.g. from `openssl rand -hex 32`), set as a real environment variable: the
+  terminal's Live Component signs its state with it, and every page fails with an empty secret.
 - **HTTPS certificate**: Caddy signs it with its own local certificate authority, so browsers warn about it. To trust
   it, copy the authority's root certificate out of the container, then import it in your OS or browser trust store (as a
   trusted root certificate authority):
