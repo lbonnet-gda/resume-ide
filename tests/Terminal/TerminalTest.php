@@ -22,13 +22,19 @@ final class TerminalTest extends TestCase
 
     public function testHelpListsEveryCommand(): void
     {
-        $output = $this->terminal()->execute('help', '')->output;
+        $expected = <<<'TEXT'
+            Available commands:
+              help          List available commands
+              ls [path]     List a folder
+              cd <path>     Change the current folder
+              cat <file>    Print a file
+              open <file>   Open a file in the editor
+              whoami        Short presentation
+              download cv   Download the PDF resume
+              clear         Clear the terminal
+            TEXT;
 
-        $usages = ['help', 'ls [path]', 'cd <path>', 'cat <file>', 'open <file>', 'whoami', 'download cv', 'clear'];
-
-        foreach ($usages as $usage) {
-            self::assertStringContainsString($usage, $output);
-        }
+        self::assertSame($expected, $this->terminal()->execute('help', '')->output);
     }
 
     public function testUnknownCommandSuggestsHelp(): void
@@ -149,7 +155,12 @@ final class TerminalTest extends TestCase
      */
     public static function completions(): iterable
     {
-        yield 'command name is not a path' => ['  co', '', []];
+        yield 'single command name' => ['  he', '', ['help']];
+        yield 'command names sorted' => ['c', '', ['cat', 'cd', 'clear']];
+        yield 'unknown command name' => ['co', '', []];
+        yield 'download target' => ['download ', '', ['cv']];
+        yield 'unknown download target' => ['download x', '', []];
+        yield 'download takes a single target' => ['download cv ', '', []];
         yield 'empty word lists the current folder' => ['ls ', 'src', ['Education/', 'Experience/']];
         yield 'folders get a slash, sorted like the tree' => ['cat c', '', ['config/', 'composer.json']];
         yield 'keeps the typed path' => ['cat ../src/Experience/A', 'config', ['../src/Experience/AcmeCorp.php']];

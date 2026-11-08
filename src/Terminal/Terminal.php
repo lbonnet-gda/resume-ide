@@ -9,29 +9,6 @@ use App\ProjectTree\Folder;
 
 final readonly class Terminal
 {
-    private const string HELP = <<<'TEXT'
-        Available commands:
-          help          List available commands
-          ls [path]     List a folder
-          cd <path>     Change the current folder
-          cat <file>    Print a file
-          open <file>   Open a file in the editor
-          whoami        Short presentation
-          download cv   Download the PDF resume
-          clear         Clear the terminal
-        TEXT;
-
-    private const array MAX_ARGUMENTS = [
-        'help' => 0,
-        'ls' => 1,
-        'cd' => 1,
-        'cat' => 1,
-        'open' => 1,
-        'whoami' => 0,
-        'download' => 1,
-        'clear' => 0,
-    ];
-
     public function __construct(
         private Folder $root,
         private Profile $profile,
@@ -51,34 +28,39 @@ final readonly class Terminal
     public function execute(string $input, string $cwd): TerminalResult
     {
         $arguments = preg_split('/\s+/', $input, flags: PREG_SPLIT_NO_EMPTY) ?: [];
-        $command = array_shift($arguments);
+        $name = array_shift($arguments);
 
-        if ($command === null) {
+        if ($name === null) {
             return new TerminalResult($cwd);
         }
 
-        if ($command === 'ls') {
+        $command = Command::tryFrom($name);
+
+        if ($command === null) {
+            return $this->error($cwd, $name.': command not found. Type "help" to list available commands.');
+        }
+
+        if ($command === Command::Ls) {
             $arguments = array_values(
                 array_filter($arguments, static fn (string $argument): bool => !str_starts_with($argument, '-')),
             );
         }
 
-        if (count($arguments) > (self::MAX_ARGUMENTS[$command] ?? PHP_INT_MAX)) {
-            return $this->error($cwd, $command.': too many arguments');
+        if (count($arguments) > $command->maxArguments()) {
+            return $this->error($cwd, $name.': too many arguments');
         }
 
         $argument = $arguments[0] ?? null;
 
         return match ($command) {
-            'help' => new TerminalResult($cwd, self::HELP),
-            'ls' => $this->ls($argument, $cwd),
-            'cd' => $this->cd($argument, $cwd),
-            'cat' => $this->cat($argument, $cwd),
-            'open' => $this->open($argument, $cwd),
-            'whoami' => new TerminalResult($cwd, $this->whoami()),
-            'download' => $this->download($argument, $cwd),
-            'clear' => new TerminalResult($cwd, action: TerminalAction::Clear),
-            default => $this->error($cwd, $command.': command not found. Type "help" to list available commands.'),
+            Command::Help => new TerminalResult($cwd, $this->help()),
+            Command::Ls => $this->ls($argument, $cwd),
+            Command::Cd => $this->cd($argument, $cwd),
+            Command::Cat => $this->cat($argument, $cwd),
+            Command::Open => $this->open($argument, $cwd),
+            Command::Whoami => new TerminalResult($cwd, $this->whoami()),
+            Command::Download => $this->download($argument, $cwd),
+            Command::Clear => new TerminalResult($cwd, action: TerminalAction::Clear),
         };
     }
 
@@ -89,6 +71,21 @@ final readonly class Terminal
      */
     public function complete(string $input, string $cwd): array
     {
+        $words = preg_split('/\s+/', ltrim($input)) ?: [''];
+
+        if (count($words) === 1) {
+            $commands = array_map(static fn (Command $command): string => $command->value, Command::cases());
+            sort($commands);
+
+            return array_values(
+                array_filter($commands, static fn (string $command): bool => str_starts_with($command, $words[0])),
+            );
+        }
+
+        if ($words[0] === Command::Download->value) {
+            return count($words) === 2 && str_starts_with('cv', $words[1]) ? ['cv'] : [];
+        }
+
         if (preg_match('#\s(\S*/)?([^\s/]*)$#', ltrim($input), $matches) !== 1) {
             return [];
         }
@@ -109,6 +106,17 @@ final readonly class Terminal
         }
 
         return $candidates;
+    }
+
+    private function help(): string
+    {
+        $lines = ['Available commands:'];
+
+        foreach (Command::cases() as $command) {
+            $lines[] = sprintf('  %-14s%s', $command->usage(), $command->description());
+        }
+
+        return implode("\n", $lines);
     }
 
     private function ls(?string $path, string $cwd): TerminalResult
